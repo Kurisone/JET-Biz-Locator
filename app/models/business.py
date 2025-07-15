@@ -33,7 +33,7 @@ class Business(db.Model):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
-
+    # This is for the API responses
     def to_dict(self):
       return {
         'id': self.id,
