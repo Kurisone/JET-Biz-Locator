@@ -66,17 +66,17 @@ class Business(db.Model):
     # Relationship to reviews of this business (1-to-M)
     # Detail explanation: One business can have MANY reviews; Each review belongs to exactly ONE business
     # A given business can have multiple reviews written about it
-    reviews = db.relationship("Review", back_populates="business", cascade="all, delete")
+    # reviews = db.relationship("Review", back_populates="business", cascade="all, delete")
 
     # Relationship to Business Categories (M-to-M)
     # Many-to-many relationship with categories
     # Detail explanation: One business can have MANY categories(a pizza place (e.g., Tom pizza) is  "Restaurant" + "Italian" + "Takeout");
     # One category can include MANY businesses("Restaurant" includes Tom's pizza + Maria's diner + etc )
     # This business can be tagged with multiple categories, and categories can be shared by multiple businesses
-    categories = db.relationship("Category", secondary="business_categories", back_populates="businesses")
+    # categories = db.relationship("Category", secondary="business_categories", back_populates="businesses")
 
     # Relationship to Business Images (1-M)
     # Detail explanation: One business can have MANY images (Tom's Pizza has photos of storefront, interior, food);
     # Each image belongs to exactly ONE business
     # A given business can have multiple photos uploaded for it
-    business_images = db.relationship("BusinessImage", back_populates="business", cascade="all, delete")
+    # business_images = db.relationship("BusinessImage", back_populates="business", cascade="all, delete")
