@@ -61,9 +61,12 @@ def seed_reviews():
 
 def undo_reviews():
     if environment == "production":
-        db.session.execute(f"TRUNCATE table {SCHEMA}. reviews RESTART IDENTITY CASCADE;") ## TRUNCATE TABLE - wipe out everything in this table FAST and reset all the ID counters
+        db.session.execute(
+            f"TRUNCATE table {SCHEMA}.reviews RESTART IDENTITY CASCADE;"
+        ) ## TRUNCATE TABLE - wipe out everything in this table FAST and reset all the ID counters
     else:
-    db.session.execute(text("DELETE FROM reviews"))
+        db.session.execute(text("DELETE FROM reviews"))
+   
     db.session.commit()
 
 
