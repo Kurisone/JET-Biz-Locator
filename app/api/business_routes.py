@@ -111,3 +111,20 @@ def update_business(id):
 
     # return updated business
     return business.to_dict()
+
+# Delete a business by ID
+# Get the business by ID
+# Check if it exists (404 if not)
+# Delete the business from database
+# Commit changes
+# Return success message
+
+@business_routes.route('/<int:id>', methods=['DELETE'])
+def delete_business(id):
+    business = Business.query.get(id)
+    if not business:
+        return {"error": "Business not found"}, 404
+
+    db.session.delete(business)
+    db.session.commit()
+    return {"message": "Business deleted successfully"}, 200
