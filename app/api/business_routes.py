@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from app.models import Business, db  # Import Business model
-# from flask_login import current_user, login_required  # This is needed for later
+from flask_login import current_user, login_required  # This is needed for later
 
 # Create the blueprint
 business_routes = Blueprint('business', __name__)
@@ -22,6 +22,7 @@ def get_all_businesses():
 @business_routes.route('/<int:id>')
 def get_single_business(id):
     business = Business.query.get(id)
+
     if not business:
       return {"error": "Business not found"}, 404
     return business.to_dict()
@@ -32,12 +33,13 @@ def get_single_business(id):
 # Add to database
 # Return the created business
 @business_routes.route('/', methods=['POST'])
+@login_required
 def create_business():
 
     data = request.get_json()
     business = Business(
-        owner_id=data['owner_id'], # Required field (will error if missing)
-        name=data['name'],
+        owner_id=current_user.id,
+        name=data['name'], # Required field (will error if missing)
         description=data['description'],
         address=data['address'],
         city=data['city'],
@@ -73,10 +75,16 @@ def create_business():
 # Return updated business
 
 @business_routes.route('/<int:id>', methods=['PUT'])
+@login_required
 def update_business(id):
     business = Business.query.get(id)
+
     if not business:
         return {"error": "Business not found"}, 404
+
+    # Check if current users owns the business
+    if business.owner_id != current_user.id:
+        return {"error": "Access denied. You can only modify your own businesses."}, 403
 
     data = request.get_json()
 
@@ -120,10 +128,16 @@ def update_business(id):
 # Return success message
 
 @business_routes.route('/<int:id>', methods=['DELETE'])
+@login_required
 def delete_business(id):
     business = Business.query.get(id)
+
     if not business:
         return {"error": "Business not found"}, 404
+
+    # Check if current users owns the business
+    if business.owner_id != current_user.id:
+        return {"error": "Access denied. You can only modify your own businesses."}, 403
 
     db.session.delete(business)
     db.session.commit()
