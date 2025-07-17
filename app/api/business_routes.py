@@ -49,9 +49,65 @@ def create_business():
         email=data.get('email'),
         price_range=data.get('price_range'),
         latitude=data.get('latitude'),
-        longitude=data.get('longitude')
+        longitude=data.get('longitude'),
+        hours_monday=data.get('hours_monday'),
+        hours_tuesday=data.get('hours_tuesday'),
+        hours_wednesday=data.get('hours_wednesday'),
+        hours_thursday=data.get('hours_thursday'),
+        hours_friday=data.get('hours_friday'),
+        hours_saturday=data.get('hours_saturday'),
+        hours_sunday=data.get('hours_sunday'),
+        is_active=data.get('is_active', True)
     )
 
     db.session.add(business)
     db.session.commit()
     return business.to_dict(), 201
+
+# Update a business by ID
+# Get the business by ID
+# Check if it exists (404 if not)
+# Get JSON data from request
+# Update business fields
+# Commit changes
+# Return updated business
+
+@business_routes.route('/<int:id>', methods=['PUT'])
+def update_business(id):
+    business = Business.query.get(id)
+    if not business:
+        return {"error": "Business not found"}, 404
+
+    data = request.get_json()
+
+    # update the attribuites of a business - only update if provided in request
+    # data.get('attribute', business.field) - Only updates if attribute is provided, otherwise keeps existing value
+    # There is no need to add the session, business is already in session from query
+    business.owner_id = data.get('owner_id', business.owner_id)
+    business.name = data.get('name', business.name)
+    business.description = data.get('description', business.description)
+    business.address = data.get('address', business.address)
+    business.city = data.get('city', business.city)
+    business.state = data.get('state', business.state)
+    business.zip_code = data.get('zip_code', business.zip_code)
+    business.country = data.get('country', business.country)
+    business.phone = data.get('phone', business.phone)
+    business.website = data.get('website', business.website)
+    business.email = data.get('email', business.email)
+    business.price_range = data.get('price_range', business.price_range)
+    business.latitude = data.get('latitude', business.latitude)
+    business.longitude = data.get('longitude', business.longitude)
+    business.hours_monday = data.get('hours_monday', business.hours_monday)
+    business.hours_tuesday = data.get('hours_tuesday', business.hours_tuesday)
+    business.hours_wednesday = data.get('hours_wednesday', business.hours_wednesday)
+    business.hours_thursday = data.get('hours_thursday', business.hours_thursday)
+    business.hours_friday = data.get('hours_friday', business.hours_friday)
+    business.hours_saturday = data.get('hours_saturday', business.hours_saturday)
+    business.hours_sunday = data.get('hours_sunday', business.hours_sunday)
+    business.is_active = data.get('is_active', business.is_active)
+
+    # commit changes
+    db.session.commit()
+
+    # return updated business
+    return business.to_dict()
