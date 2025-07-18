@@ -142,3 +142,15 @@ def delete_business(id):
     db.session.delete(business)
     db.session.commit()
     return {"message": "Business deleted successfully"}, 200
+
+# Get all businesses owned by the current logged-in user
+# Query businesses where owner_id = current_user.id
+# Convert to list of dictionaries
+# Return in proper format
+
+@business_routes.route('/my-businesses')
+@login_required
+def get_my_businesses():
+    businesses = Business.query.filter(Business.owner_id == current_user.id)
+    business_list = [business.to_dict() for business in businesses]
+    return {"businesses": business_list}
