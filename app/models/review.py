@@ -16,17 +16,17 @@ class Review(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # relationships
-user = db.relationship("User", back_populates="reviews")
-business = db.relationship("Business", back_populates="reviews")
+    user = db.relationship("User", back_populates="reviews")
+    business = db.relationship("Business", back_populates="reviews")
 
-def to_dict(self):
-    return {
-        "id": self.id,
-        "userId": self.user_id,
-        "businessId": self.business_id,
-        "rating": self.rating,
-        "title": self.title,
-        "content": self.content,
-        "createdAt": self.created_at,
-        "user": self.user.to_dict() # optional, for frontend
-    }
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "userId": self.user_id,
+            "businessId": self.business_id,
+            "rating": self.rating,
+            "title": self.title,
+            "content": self.content,
+            "createdAt": self.created_at,
+            "user": self.user.to_dict() if self.user else None # optional, for frontend
+        }
