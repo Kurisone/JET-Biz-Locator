@@ -11,6 +11,14 @@ def get_reviews():
     reviews = Review.query.all() ## grabs every review in the db
     return jsonify([r.to_dict() for r in reviews]) ## converts each review object into a dictionary so it can be jsonified.
 
+## Added to Get review by id
+@review_routes.route('/<int:id>')
+def get_review_by_id(id):
+    review = Review.query.get(id)
+    if not review:
+        return {"message": "Review not found"}, 404
+    return jsonify(review.to_dict())
+
 ## Create Review
 @review_routes.route('/', methods=['POST'])
 def create_review():
@@ -62,3 +70,4 @@ def delete_review(review_id):
     return {'message': "Review deleted"}
 
 
+## Review button?
