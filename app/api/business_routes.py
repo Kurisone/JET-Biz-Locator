@@ -137,7 +137,7 @@ def delete_business(id):
 
     # Check if current users owns the business
     if business.owner_id != current_user.id:
-        return {"error": "Access denied. You can only modify your own businesses."}, 403
+        return {"error": "Access denied. You can only delete your own businesses."}, 403
 
     db.session.delete(business)
     db.session.commit()
