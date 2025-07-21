@@ -14,6 +14,12 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
 
+    #relationships
+    reviews = db.relationship("Review", back_populates="user", cascade="all, delete")
+    #back_populates - if I get a Review, I can access the related User through review.user"
+    #cascade - it controls what happens to related reviews if a user is deleted; if I delete a User, automatically delete all of their Reviews too.
+    businesses = db.relationship("Business", back_populates="owner", cascade="all, delete")
+
     @property
     def password(self):
         return self.hashed_password
@@ -31,9 +37,3 @@ class User(db.Model, UserMixin):
             'username': self.username,
             'email': self.email
         }
-    #relationships
-    reviews = db.relationship("Review", back_populates="user", cascade="all, delete")
-    #back_populates - if I get a Review, I can access the related User through review.user"
-    #cascade - it controls what happens to related reviews if a user is deleted; if I delete a User, automatically delete all of their Reviews too.
-
-    businesses = db.relationship("Business", back_populates="owner", cascade="all, delete")

@@ -32,6 +32,8 @@ class Business(db.Model):
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+    
+    reviews = db.relationship("Review", back_populates="business", cascade="all, delete") ### added to fix 404 issue
 
     # Relationships
 

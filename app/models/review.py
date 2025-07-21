@@ -3,10 +3,10 @@ from datetime import datetime
 
 class Review(db.Model):
     __tablename__ = 'reviews' # creating tablename
-
+    
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
-
+    
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
     business_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('businesses.id')), nullable=False)
@@ -28,5 +28,5 @@ class Review(db.Model):
             "title": self.title,
             "content": self.content,
             "createdAt": self.created_at,
-            "user": self.user.to_dict() # optional, for frontend
+            "user": self.user.to_dict() if self.user else None # optional, for frontend
         }
