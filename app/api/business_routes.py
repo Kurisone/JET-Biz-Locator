@@ -1,6 +1,7 @@
 from flask import Blueprint, request
-from app.models import Business, db  # Import Business model
+from app.models import Business, db, Review  # Import Business model
 from flask_login import current_user, login_required  # This is needed for later
+from sqlalchemy import desc, asc #import sorting helpers if not already
 
 # Create the blueprint
 business_routes = Blueprint('business', __name__)
@@ -154,3 +155,45 @@ def get_my_businesses():
     businesses = Business.query.filter(Business.owner_id == current_user.id)
     business_list = [business.to_dict() for business in businesses]
     return {"businesses": business_list}
+
+
+## Added to Business_routes to be nested under business
+## if you are getting reviews that belong to business, it has to be nested under business.
+@business_routes.route('/<int:id>/reviews')
+def get_reviews_for_business(id):
+    business = Business.query.get(id)
+    if not business:
+        return {"message": "Business not found"}, 404
+
+    # Pagination, sorting
+    page = int(request.args.get('page', 1))
+    limit = int(request.args.get('limit', 10))
+    sort = request.args.get('sort', 'newest')
+
+    if sort == 'oldest':
+        sort_by = asc(Review.created_at)
+    elif sort == 'highest':
+        sort_by = desc(Review.rating)
+    elif sort == 'lowest':
+        sort_by = asc(Review.rating)
+    else:  # default to newest
+        sort_by = desc(Review.created_at)
+
+    query = Review.query.filter_by(business_id=id).order_by(sort_by)
+    paginated = query.paginate(page=page, per_page=limit, error_out=False)
+
+    reviews = [review.to_dict() for review in paginated.items]
+
+    return {
+        "reviews": reviews,
+        "business": {
+            "id": business.id,
+            "name": business.name
+        },
+        "pagination": {
+            "page": paginated.page,
+            "pages": paginated.pages,
+            "per_page": paginated.per_page,
+            "total": paginated.total
+        }
+    }
