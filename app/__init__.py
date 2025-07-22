@@ -7,11 +7,8 @@ from flask_login import LoginManager
 from .models import db, User
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
-<<<<<<< HEAD
 from .api.review_routes import review_routes ## this was missing and causing 404 error
-=======
 from .api.business_routes import business_routes
->>>>>>> origin/dev
 from .seeds import seed_commands
 from .config import Config
 

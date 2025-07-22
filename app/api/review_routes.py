@@ -1,49 +1,111 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
-from app.models import db, Review
+from app.models import db, Review, Business
+from sqlalchemy import desc, asc
+from datetime import datetime
+
 
 review_routes = Blueprint('reviews', __name__)
 
 
-## Backend Route: Get All Reviews
-@review_routes.route('/')
-def get_reviews():
-    reviews = Review.query.all() ## grabs every review in the db
-    return jsonify([r.to_dict() for r in reviews]) ## converts each review object into a dictionary so it can be jsonified.
+## Backend Route: Get All Reviews for a business
+@review_routes.route('/businesses/<int:id>/reviews')
+def get_reviews_for_business(id): ## grabs every review for business by id
+    business = Business.query.get(id)
+    if not business:
+        return {"message": "Business not found"}, 404
+
+    # Pagination, splitting data into pages instead of sending everything at once
+    page = int(request.args.get('page', 1))
+    limit = int(request.args.get('limit', 10))
+    sort = request.args.get('sort', 'newest')
+
+    # Sorting, organizing the reviews in a specific order
+    if sort == 'oldest':
+        sort_by = asc(Review.created_at)
+    elif sort == 'highest':
+        sort_by = desc(Review.rating)
+    elif sort == 'lowest':
+        sort_by = asc(Review.rating)
+    else:  # default to newest
+        sort_by = desc(Review.created_at)
+
+    query = Review.query.filter_by(business_id=id).order_by(sort_by)
+    paginated = query.paginate(page=page, per_page=limit, error_out=False)
+
+    reviews = [review.to_dict() for review in paginated.items]
+
+    return jsonify({
+        "reviews": reviews,
+        "business": {
+            "id": business.id,
+            "name": business.name
+        },
+        "pagination": {
+            "page": paginated.page,
+            "pages": paginated.pages,
+            "per_page": paginated.per_page,
+            "total": paginated.total
+        }
+    })
 
 ## Added to Get review by id
-@review_routes.route('/<int:id>')
-def get_review_by_id(id):
-    review = Review.query.get(id)
+@review_routes.route('/<int:review_id>')
+def get_review_by_id(review_id):
+    review = Review.query.get(review_id)
     if not review:
         return {"message": "Review not found"}, 404
     return jsonify(review.to_dict())
 
-## Create Review
-@review_routes.route('/', methods=['POST'])
-def create_review():
+## Create Review for a Business
+@review_routes.route('/businesses/<int:id>/reviews', methods=['POST'])
+@login_required
+def create_review(id):
+    business = Business.query.get(id)
+    if not business:
+        return {"message": "Business not found"}, 404
+
     data = request.get_json()
+    rating = data.get('rating')
+    title = data.get('title')
+    content = data.get('content')
+
+    # Validation
+    errors = {}
+    if not content:
+        errors["content"] = "Review content cannot be empty"
+    if not rating or not (1 <= rating <= 5):
+        errors["rating"] = "Rating must be between 1 and 5"
+    if errors:
+        return {"message": "Validation error", "errors": errors}, 400
+
+    # Check if user already reviewed
+    existing = Review.query.filter_by(user_id=current_user.id, business_id=id).first()
+    if existing:
+        return {"message": "You have already reviewed this business"}, 409
 
     new_review = Review(
-        user_id=data['user_id'],
-        rating=data['rating'],
-        title=data['title'],
-        content=data['content']
+        user_id=current_user.id,
+        business_id=id,
+        rating=rating,
+        title=title,
+        content=content,
+        created_at=datetime.utcnow()
     )
 
     db.session.add(new_review)
     db.session.commit()
-    return new_review.to_dict()
+    return jsonify(new_review.to_dict()), 201
 
 ## Edit Review
-@review_routes.route('/<int:review_id>', methods=['PUT'])
+@review_routes.route('/reviews/<int:review_id>', methods=['PUT'])
 @login_required
 def update_review(review_id):
     data = request.get_json()
     review = Review.query.get(review_id)
 
     if not review:
-        return {"error": "Not Found"}, 404
+        return {"error": "Review not found"}, 404
     if review.user_id != current_user.id:
         return {"error": "Unauthorized"}, 403
     
@@ -55,7 +117,7 @@ def update_review(review_id):
     return review.to_dict()
 
 ## Delete Review
-@review_routes.route('/<int:review_id>', methods=['DELETE'])
+@review_routes.route('/reviews/<int:review_id>', methods=['DELETE'])
 @login_required
 def delete_review(review_id):
     review = Review.query.get(review_id)
