@@ -74,7 +74,7 @@ def create_review(id):
     business = Business.query.get(id)
     if not business:
         return {"message": "Business not found"}, 404
-
+        
     data = request.get_json()
     rating = data.get('rating')
     title = data.get('title')
