@@ -1,20 +1,61 @@
 from flask import Blueprint, request
-from app.models import Business, db, Review  # Import Business model
+from app.models import Business, db, Review, Category  # Import models
 from flask_login import current_user, login_required  # This is needed for later
-from sqlalchemy import desc, asc #import sorting helpers if not already
-
+from sqlalchemy import desc, asc, or_, and_ #import sorting helpers and or_ and and_ for queries
 # Create the blueprint
 business_routes = Blueprint('business', __name__)
 
-# Get all businesses
+# Get all businesses with optional search/filter parameters
 # Query all businesses from database
 # Convert to list of dictionaries using to_dict()
 # Return the data
+# Query parameters:
+# search: Search by business name (partial match, case-insensitive)
+# category: Filter by category name or ID
+# price: Exact price range (1-4)
+
 @business_routes.route('/')  # This will be /api/businesses
 def get_all_businesses():
-    businesses = Business.query.all() # get all businesses from db
+    query = Business.query # this is the base queryapp/seeds
+
+    # Then get search/filter paramters from the url query string
+    search = request.args.get('search', '').strip()
+    category = request.args.get('category', '').strip()
+    price = request.args.get('price')
+
+    # search by business name
+    if search:
+        query = query.filter(Business.name.ilike(f'%{search}%'))
+
+    # search by category
+    if category:
+
+        if category.isdigit(): #  this is to check if category ID (numeric) or category name
+
+            query = query.join(Business.categories).filter(Category.id == int(category)) # filter by category ID
+        else:
+
+            query = query.join(Business.categories).filter(Category.name.ilike(f'%{category}%')) # filter by category name (case-insensitive, partial match)
+
+    # search by price
+    if price:
+
+        query = query.filter(Business.price_range == int(price)) # this is when there is Exact price match
+
+
+    businesses = query.all() # execute the query
     business_list = [business.to_dict() for business in businesses] # convert each business to dictionary
-    return {"businesses": business_list} # return the result in proper format
+
+    # return the result in proper format with additional info
+    return {
+        "businesses": business_list,
+        "total_results": len(business_list),
+        "search_params": {
+            "search": search or None,
+            "category": category or None,
+            "price": price
+        }
+    }
 
 # Get a single business by ID
 # Query business by ID
