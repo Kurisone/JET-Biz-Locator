@@ -8,7 +8,15 @@ from datetime import datetime
 review_routes = Blueprint('reviews', __name__)
 
 
+## Backend Route: Get All Reviews
+@review_routes.route('/')
+def get_all_reviews():
+    reviews = Review.query.all()
+    return jsonify([review.to_dict() for review in reviews])
+
+
 ## Backend Route: Get All Reviews for a business
+## Users should be able to view all reviews on business
 @review_routes.route('/businesses/<int:id>/reviews')
 def get_reviews_for_business(id): ## grabs every review for business by id
     business = Business.query.get(id)
@@ -58,6 +66,8 @@ def get_review_by_id(review_id):
     return jsonify(review.to_dict())
 
 ## Create Review for a Business
+## Users should be able to add a review to a business
+
 @review_routes.route('/businesses/<int:id>/reviews', methods=['POST'])
 @login_required
 def create_review(id):
@@ -98,6 +108,7 @@ def create_review(id):
     return jsonify(new_review.to_dict()), 201
 
 ## Edit Review
+## Users should be able to update their review on a business
 @review_routes.route('/reviews/<int:review_id>', methods=['PUT'])
 @login_required
 def update_review(review_id):
@@ -117,6 +128,7 @@ def update_review(review_id):
     return review.to_dict()
 
 ## Delete Review
+## users should be able to delete their review from a business
 @review_routes.route('/reviews/<int:review_id>', methods=['DELETE'])
 @login_required
 def delete_review(review_id):
