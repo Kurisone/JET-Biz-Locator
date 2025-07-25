@@ -18,7 +18,8 @@ class Review(db.Model):
     # relationships
     user = db.relationship("User", back_populates="reviews")
     business = db.relationship("Business", back_populates="reviews")
-
+    review_image = db.relationship('Review', back_populates='review_images')
+    
     def to_dict(self):
         return {
             "id": self.id,

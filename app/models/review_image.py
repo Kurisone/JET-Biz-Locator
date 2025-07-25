@@ -15,7 +15,6 @@ class ReviewImage(db.Model):
 
     review = db.relationship('Review', backref='images')
     user = db.relationship('User', backref='uploaded_review_images')
-
     def to_dict(self):
         return {
             'id': self.id,

@@ -34,7 +34,6 @@ class Business(db.Model):
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
     reviews = db.relationship("Review", back_populates="business", cascade="all, delete") ### added to fix 404 issue
-
     # Relationships
 
     # Relationship to User (owner) (M-to-1)
@@ -60,7 +59,7 @@ class Business(db.Model):
     # Detail explanation: One business can have MANY images (Tom's Pizza has photos of storefront, interior, food);
     # Each image belongs to exactly ONE business
     # A given business can have multiple photos uploaded for it
-    # business_images = db.relationship("BusinessImage", back_populates="business", cascade="all, delete")
+    business_images = db.relationship("BusinessImage", back_populates="business", cascade="all, delete")
 
 
     # This is for the API responses
