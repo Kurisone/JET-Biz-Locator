@@ -60,12 +60,14 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('business_id', sa.Integer(), nullable=False),
+    sa.Column('review_image', sa.Integer(), nullable=True),
     sa.Column('rating', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=100), nullable=True),
     sa.Column('content', sa.Text(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['business_id'], ['businesses.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['review_image'], ['review_images.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
