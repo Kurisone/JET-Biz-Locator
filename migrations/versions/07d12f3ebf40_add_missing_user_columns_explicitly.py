@@ -17,13 +17,22 @@ depends_on = None
 
 
 def upgrade():
-    with op.batch_alter_table('users', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('first_name', sa.String(length=50), nullable=True))
-        batch_op.add_column(sa.Column('last_name', sa.String(length=50), nullable=True))
-        batch_op.add_column(sa.Column('profile_image_url', sa.String(length=255), nullable=True))
-        batch_op.add_column(sa.Column('created_at', sa.DateTime(), nullable=True))
-        batch_op.add_column(sa.Column('updated_at', sa.DateTime(), nullable=True))
+    # Check if columns exist before adding them
+    conn = op.get_bind()
+    inspector = sa.inspect(conn)
+    columns = [col['name'] for col in inspector.get_columns('users')]
 
+    with op.batch_alter_table('users', schema=None) as batch_op:
+        if 'first_name' not in columns:
+            batch_op.add_column(sa.Column('first_name', sa.String(length=50), nullable=True))
+        if 'last_name' not in columns:
+            batch_op.add_column(sa.Column('last_name', sa.String(length=50), nullable=True))
+        if 'profile_image_url' not in columns:
+            batch_op.add_column(sa.Column('profile_image_url', sa.String(length=255), nullable=True))
+        if 'created_at' not in columns:
+            batch_op.add_column(sa.Column('created_at', sa.DateTime(), nullable=True))
+        if 'updated_at' not in columns:
+            batch_op.add_column(sa.Column('updated_at', sa.DateTime(), nullable=True))
 
 def downgrade():
     with op.batch_alter_table('users', schema=None) as batch_op:
