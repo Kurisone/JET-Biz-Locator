@@ -8,17 +8,17 @@ const CreateReviewForm = ({ businessId, onSuccess }) => {
   const { closeModal } = useModal(); // Close modal on submit
 
   const [content, setContent] = useState(''); // Review text
-  const [rating, setRating] = useState(''); // Rating 1-5
-  const [errors, setErrors] = useState({}); // Validation errors
+  const [rating, setRating] = useState(''); // 
+  const [errors, setErrors] = useState({}); // 
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page refresh
     setErrors({}); // Clear previous errors
 
     const payload = {
-      content: content.trim(), // Remove spaces from content
-      rating: Number(rating), // Convert rating to number
-      title: '' // Optional for now
+      content: content.trim(), 
+      rating: Number(rating), 
+      title: '' 
     };
 
     try {
@@ -48,10 +48,10 @@ const CreateReviewForm = ({ businessId, onSuccess }) => {
       <label>
         Rating (1–5):
         <input
-          type="number" // Numeric input
-          min="1" // Min rating
-          max="5" // Max rating
-          value={rating} // Controlled input
+          type="number" 
+          min="1" 
+          max="5" 
+          value={rating}
           onChange={(e) => setRating(e.target.value)} // Update state
           required // HTML validation
         />
@@ -68,4 +68,4 @@ const CreateReviewForm = ({ businessId, onSuccess }) => {
   );
 };
 
-export default CreateReviewForm; // Export component
+export default CreateReviewForm;
