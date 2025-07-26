@@ -1,4 +1,5 @@
-from app.models import ReviewImage, db
+from app.models import ReviewImage, db, environment, SCHEMA
+from sqlalchemy.sql import text
 from datetime import datetime
 
 def seed_review_images():
@@ -36,5 +37,11 @@ def seed_review_images():
     db.session.commit()
 
 def undo_review_images():
-    db.session.query(ReviewImage).delete()
-    db.session.commit()
+    try:
+        if environment == "production":
+            db.session.execute(text(f"TRUNCATE table {SCHEMA}.review_images RESTART IDENTITY CASCADE;"))
+        else:
+            db.session.execute(text("DELETE FROM review_images"))
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
