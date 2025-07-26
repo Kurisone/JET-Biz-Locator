@@ -4,3 +4,6 @@ __pycache__/
 .venv
 .DS_Store
 .vscode/
+instance/dev.db
+instance/*.db
+instance/dev.db

@@ -1,6 +1,7 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+#from datetime import datetime - don't need import datetime since using db.func.current_timestamp()
 
 
 class User(db.Model, UserMixin):
@@ -13,6 +14,18 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(40), nullable=False, unique=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    profile_image_url = db.Column(db.String(255), nullable=True)
+    created_at = db.Column(db.DateTime, nullable=True, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, nullable=True, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+
+
+    #relationships
+    reviews = db.relationship("Review", back_populates="user", cascade="all, delete")
+    #back_populates - if I get a Review, I can access the related User through review.user"
+    #cascade - it controls what happens to related reviews if a user is deleted; if I delete a User, automatically delete all of their Reviews too.
+    businesses = db.relationship("Business", back_populates="owner", cascade="all, delete")
 
     @property
     def password(self):
@@ -29,9 +42,8 @@ class User(db.Model, UserMixin):
         return {
             'id': self.id,
             'username': self.username,
-            'email': self.email
+            'email': self.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'profile_image_url': self.profile_image_url
         }
-#relationships
-reviews = db.relationship("Review", back_populates="user", cascade="all, delete") 
-#back_populates - if I get a Review, I can access the related User through review.user"
-#cascade - it controls what happens to related reviews if a user is deleted; if I delete a User, automatically delete all of their Reviews too.
