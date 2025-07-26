@@ -37,8 +37,12 @@ def seed_business_images():
     db.session.commit()
 
 def undo_business_images():
-    if environment == "production":
-        db.session.execute(text(f"TRUNCATE table {SCHEMA}.business_images RESTART IDENTITY CASCADE;"))
-    else:
-        db.session.execute(text("DELETE FROM business_images"))
-    db.session.commit()
+    try:
+        if environment == "production":
+            db.session.execute(text(f"TRUNCATE table {SCHEMA}.business_images RESTART IDENTITY CASCADE;"))
+        else:
+            db.session.execute(text("DELETE FROM business_images"))
+        db.session.commit()
+    except Exception as e:
+        # If table is empty or doesn't exist, that's fine for a fresh deployment
+        db.session.rollback()
