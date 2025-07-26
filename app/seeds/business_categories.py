@@ -31,9 +31,11 @@ def seed_business_categories():
     db.session.commit()
 
 def undo_business_categories():
-    if environment == "production":
-        db.session.execute(f"TRUNCATE table {SCHEMA}.business_categories RESTART IDENTITY CASCADE;")
-    else:
-        db.session.execute(text("DELETE FROM business_categories"))
-
-    db.session.commit()
+    try:
+        if environment == "production":
+            db.session.execute(text(f"TRUNCATE table {SCHEMA}.business_categories RESTART IDENTITY CASCADE;"))
+        else:
+            db.session.execute(text("DELETE FROM business_categories"))
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
