@@ -1,3 +1,11 @@
+from flask import Blueprint, request, jsonify
+from flask_login import login_required, current_user
+from app.models import db, Review, ReviewImage  
+from datetime import datetime
+
+# Create the blueprint for review image routes
+review_image_routes = Blueprint('review_images', __name__)
+
 # Get all images for a review
 @review_routes.route('/<int:review_id>/images')
 def get_review_images(review_id):
