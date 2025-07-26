@@ -1,4 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+from .business_category import BusinessCategory
 
 class Category(db.Model):
     __tablename__ = 'categories'
@@ -13,8 +14,8 @@ class Category(db.Model):
     updated_at = db.Column(db.DateTime, nullable=True, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
     # relationships
-    business_categories = db.relationship("BusinessCategory", back_populates="category", cascade="all, delete-orphan", overlaps="categories")
-    businesses = db.relationship("Business", secondary="business_categories", back_populates="categories", overlaps="business_categories")
+    business_categories = db.relationship("BusinessCategory", back_populates="category", cascade="all, delete-orphan", overlaps="businesses")
+    businesses = db.relationship("Business", secondary=BusinessCategory.__table__, back_populates="categories", overlaps="business_categories")
 
     def to_dict(self):
         return {
