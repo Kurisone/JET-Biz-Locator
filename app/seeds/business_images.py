@@ -37,5 +37,8 @@ def seed_business_images():
     db.session.commit()
 
 def undo_business_images():
-    db.session.query(BusinessImage).delete()
+    if environment == "production":
+        db.session.execute(f"TRUNCATE table {SCHEMA}.business_images RESTART IDENTITY CASCADE;")
+    else:
+        db.session.execute(text("DELETE FROM business_images"))
     db.session.commit()
