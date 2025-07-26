@@ -10,7 +10,6 @@ class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
     business_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('businesses.id')), nullable=False)
-    review_image = db.relationship('ReviewImage', back_populates='review', cascade="all, delete-orphan") # relationship to review images
     rating = db.Column(db.Integer, nullable=False) # 1 to 5
     title = db.Column(db.String(100))
     content = db.Column(db.Text, nullable=False)
@@ -19,7 +18,7 @@ class Review(db.Model):
     # relationships
     user = db.relationship("User", back_populates="reviews")
     business = db.relationship("Business", back_populates="reviews")
-    review_image = db.relationship('Review', back_populates='review_images')
+    review_images = db.relationship('Review', back_populates='review_images')
     
     def to_dict(self):
         return {
