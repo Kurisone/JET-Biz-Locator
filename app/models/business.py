@@ -1,4 +1,21 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+from sqlalchemy import Table
+
+if environment == "production":
+    business_categories_table = Table(
+        'business_categories',
+        db.metadata,
+        db.Column('business_id', db.Integer, db.ForeignKey(add_prefix_for_prod('businesses.id')), primary_key=True),
+        db.Column('category_id', db.Integer, db.ForeignKey(add_prefix_for_prod('categories.id')), primary_key=True),
+        schema=SCHEMA
+    )
+else:
+    business_categories_table = Table(
+        'business_categories',
+        db.metadata,
+        db.Column('business_id', db.Integer, db.ForeignKey('businesses.id'), primary_key=True),
+        db.Column('category_id', db.Integer, db.ForeignKey('categories.id'), primary_key=True)
+    )
 
 
 class Business(db.Model):
@@ -32,7 +49,7 @@ class Business(db.Model):
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
-    reviews = db.relationship("Review", back_populates="business", cascade="all, delete") ### added to fix 404 issue
+
     # Relationships
 
     # Relationship to User (owner) (M-to-1)
@@ -44,7 +61,7 @@ class Business(db.Model):
     # Relationship to reviews of this business (1-to-M)
     # Detail explanation: One business can have MANY reviews; Each review belongs to exactly ONE business
     # A given business can have multiple reviews written about it
-
+    reviews = db.relationship("Review", back_populates="business", cascade="all, delete")
 
     # Relationship to BusinessCategories (M-to-M)
     # Many-to-many relationship with categories
@@ -52,8 +69,7 @@ class Business(db.Model):
     # One category can include MANY businesses("Restaurant" includes Tom's pizza + Maria's diner + etc )
     # This business can be tagged with multiple categories, and categories can be shared by multiple businesses
     business_categories = db.relationship("BusinessCategory", back_populates="business", cascade="all, delete-orphan", overlaps="categories")
-    categories = db.relationship("Category", secondary="business_categories", back_populates="businesses", overlaps="business_categories")
-
+    categories = db.relationship("Category", secondary=business_categories_table, back_populates="businesses")
     # Relationship to BusinessImages (1-M)
     # Detail explanation: One business can have MANY images (Tom's Pizza has photos of storefront, interior, food);
     # Each image belongs to exactly ONE business
