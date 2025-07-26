@@ -7,6 +7,7 @@ Create Date: 2025-07-26 14:41:50.615782
 """
 from alembic import op
 import sqlalchemy as sa
+from alembic import context
 
 
 # revision identifiers, used by Alembic.
@@ -17,12 +18,20 @@ depends_on = None
 
 
 def upgrade():
+    # Get the schema name if in production
+    schema = context.get_x_argument(as_dictionary=True).get('schema', None)
+    if schema is None:
+        # Check if it is in production by looking for environment variables or config
+        import os
+        if os.environ.get('FLASK_ENV') == 'production':
+            schema = os.environ.get('SCHEMA', 'yelp_schema')
+
     # Check if columns exist before adding them
     conn = op.get_bind()
     inspector = sa.inspect(conn)
-    columns = [col['name'] for col in inspector.get_columns('users')]
+    columns = [col['name'] for col in inspector.get_columns('users', schema=schema)]
 
-    with op.batch_alter_table('users', schema=None) as batch_op:
+    with op.batch_alter_table('users', schema=schema) as batch_op:
         if 'first_name' not in columns:
             batch_op.add_column(sa.Column('first_name', sa.String(length=50), nullable=True))
         if 'last_name' not in columns:
@@ -35,7 +44,13 @@ def upgrade():
             batch_op.add_column(sa.Column('updated_at', sa.DateTime(), nullable=True))
 
 def downgrade():
-    with op.batch_alter_table('users', schema=None) as batch_op:
+    schema = context.get_x_argument(as_dictionary=True).get('schema', None)
+    if schema is None:
+        import os
+        if os.environ.get('FLASK_ENV') == 'production':
+            schema = os.environ.get('SCHEMA', 'yelp_schema')
+
+    with op.batch_alter_table('users', schema=schema) as batch_op:
         batch_op.drop_column('updated_at')
         batch_op.drop_column('created_at')
         batch_op.drop_column('profile_image_url')
