@@ -1,4 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+from .business_category import BusinessCategory
 # from sqlalchemy import Table
 
 class Business(db.Model):
@@ -59,7 +60,7 @@ class Business(db.Model):
     # A given business can have multiple photos uploaded for it
     business_images = db.relationship("BusinessImage", back_populates="business", cascade="all, delete")
 
-    categories = db.relationship("Category", secondary=lambda: BusinessCategory.__table__, back_populates="businesses")
+    categories = db.relationship("Category", secondary=BusinessCategory.__table__, back_populates="businesses")
 
 
     # This is for the API responses
