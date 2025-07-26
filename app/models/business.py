@@ -1,22 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
-from sqlalchemy import Table
-
-if environment == "production":
-    business_categories_table = Table(
-        'business_categories',
-        db.metadata,
-        db.Column('business_id', db.Integer, db.ForeignKey(add_prefix_for_prod('businesses.id')), primary_key=True),
-        db.Column('category_id', db.Integer, db.ForeignKey(add_prefix_for_prod('categories.id')), primary_key=True),
-        schema=SCHEMA
-    )
-else:
-    business_categories_table = Table(
-        'business_categories',
-        db.metadata,
-        db.Column('business_id', db.Integer, db.ForeignKey('businesses.id'), primary_key=True),
-        db.Column('category_id', db.Integer, db.ForeignKey('categories.id'), primary_key=True)
-    )
-
+# from sqlalchemy import Table
 
 class Business(db.Model):
     __tablename__ = 'businesses'
@@ -69,12 +52,14 @@ class Business(db.Model):
     # One category can include MANY businesses("Restaurant" includes Tom's pizza + Maria's diner + etc )
     # This business can be tagged with multiple categories, and categories can be shared by multiple businesses
     business_categories = db.relationship("BusinessCategory", back_populates="business", cascade="all, delete-orphan", overlaps="categories")
-    categories = db.relationship("Category", secondary=business_categories_table, back_populates="businesses")
+
     # Relationship to BusinessImages (1-M)
     # Detail explanation: One business can have MANY images (Tom's Pizza has photos of storefront, interior, food);
     # Each image belongs to exactly ONE business
     # A given business can have multiple photos uploaded for it
     business_images = db.relationship("BusinessImage", back_populates="business", cascade="all, delete")
+
+    categories = db.relationship("Category", secondary=lambda: BusinessCategory.__table__, back_populates="businesses")
 
 
     # This is for the API responses
