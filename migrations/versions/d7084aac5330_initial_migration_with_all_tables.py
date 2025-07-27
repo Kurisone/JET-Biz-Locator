@@ -10,9 +10,7 @@ import sqlalchemy as sa
 import os
 
 # Get schema for production
-schema = None
-if os.environ.get('FLASK_ENV') == 'production':
-    schema = os.environ.get('SCHEMA', 'yelp_schema')
+schema = os.environ.get('SCHEMA')
 
 
 # revision identifiers, used by Alembic.
