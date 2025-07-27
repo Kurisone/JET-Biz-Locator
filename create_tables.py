@@ -54,8 +54,9 @@ CREATE TABLE IF NOT EXISTS {schema}.businesses (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )''')
 
+cur.execute(f'DROP TABLE IF EXISTS {schema}.reviews CASCADE')
 cur.execute(f'''
-CREATE TABLE IF NOT EXISTS {schema}.reviews (
+CREATE TABLE {schema}.reviews (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES {schema}.users(id),
     business_id INTEGER REFERENCES {schema}.businesses(id),
