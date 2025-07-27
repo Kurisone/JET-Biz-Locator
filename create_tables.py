@@ -54,6 +54,17 @@ CREATE TABLE IF NOT EXISTS {schema}.businesses (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )''')
 
+cur.execute(f'''
+CREATE TABLE IF NOT EXISTS {schema}.reviews (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES {schema}.users(id),
+    business_id INTEGER REFERENCES {schema}.businesses(id),
+    rating INTEGER NOT NULL,
+    title VARCHAR(100),
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)''')
+
 conn.commit()
 conn.close()
 print("Tables created successfully!")
