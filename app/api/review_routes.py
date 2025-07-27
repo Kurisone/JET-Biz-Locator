@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
-from app.models import db, Review, Business
+from app.models import db, Review, ReviewImage, Business
 from sqlalchemy import desc, asc
 from datetime import datetime
 

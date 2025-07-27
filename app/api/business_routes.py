@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from app.models import Business, db, Review, Category  # Import models
+from app.models import Business, BusinessImage, db, Review, Category  # Import models
 from flask_login import current_user, login_required  # This is needed for later
 from sqlalchemy import desc, asc, or_, and_ #import sorting helpers and or_ and and_ for queries
 # Create the blueprint
