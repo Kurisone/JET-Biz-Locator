@@ -14,11 +14,11 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(40), nullable=False, unique=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
-    # first_name = db.Column(db.String(50), nullable=False)
-    # last_name = db.Column(db.String(50), nullable=False)
-    # profile_image_url = db.Column(db.String(255), nullable=True)
-    # created_at = db.Column(db.DateTime, nullable=True, default=db.func.current_timestamp())
-    # updated_at = db.Column(db.DateTime, nullable=True, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    profile_image_url = db.Column(db.String(255), nullable=True)
+    created_at = db.Column(db.DateTime, nullable=True, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, nullable=True, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
 
     #relationships
@@ -43,7 +43,7 @@ class User(db.Model, UserMixin):
             'id': self.id,
             'username': self.username,
             'email': self.email,
-            # 'first_name': self.first_name,
-            # 'last_name': self.last_name,
-            # 'profile_image_url': self.profile_image_url
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'profile_image_url': self.profile_image_url
         }
