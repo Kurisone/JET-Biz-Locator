@@ -1,0 +1,104 @@
+.all-businesses-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.businesses-header {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  padding: 3rem 0;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.businesses-header h1 {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.businesses-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 3rem 2rem;
+}
+
+.business-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.business-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #e6e6e6;
+  height: fit-content;
+}
+
+.business-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-color: #ff6b35;
+}
+
+.business-card h3 {
+  margin: 0 0 0.75rem 0;
+  color: #333;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.business-location {
+  color: #666;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+
+.business-location::before {
+  content: "📍";
+  margin-right: 0.5rem;
+}
+
+.business-description {
+  color: #555;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .businesses-header {
+    padding: 2rem 0;
+  }
+
+  .businesses-header h1 {
+    font-size: 2rem;
+  }
+
+  .business-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .businesses-container {
+    padding: 0 1rem 2rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .business-card {
+    padding: 1rem;
+  }
+
+  .businesses-header h1 {
+    font-size: 1.75rem;
+  }
+}
