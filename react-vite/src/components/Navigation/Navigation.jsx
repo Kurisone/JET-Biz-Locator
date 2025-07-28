@@ -14,7 +14,11 @@ function Navigation() {
       <nav className="nav-container">
         <div className="nav-left">
           <NavLink to="/" className="nav-logo">
-            <h1>JET-Biz-Locator</h1>
+            <img 
+              src="/logo.png" 
+              alt="JET-Biz-Locator" 
+              className="logo-image" 
+            />
           </NavLink>
         </div>
         <div className="search-container">
