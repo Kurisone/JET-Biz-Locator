@@ -8,6 +8,8 @@ import CreateReviewForm from './CreateReviewForm'; // the form modal
 // Props: business (object with id & ownerId) and reviews (normalized object of reviews)
 const ReviewButton = ({ business, reviews}) => {
     const currentUser = useSelector(state => state.session.user);
+    const dispatch = useDispatch();
+    
     const refreshReviews = () => {
         dispatch(getReviewsByBusinessId(business.id));
     };

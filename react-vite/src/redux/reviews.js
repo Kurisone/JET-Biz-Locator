@@ -103,7 +103,7 @@ export const deleteReview = (reviewId) => async (dispatch) => {
 };
 
 export const updateReview = (reviewId, payload) => async (dispatch) => {
-    const res = await fetch(`/api/reviews/reviews/${reviewId}`, {
+    const res = await fetch(/api/reviews/reviews/${reviewId}, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
