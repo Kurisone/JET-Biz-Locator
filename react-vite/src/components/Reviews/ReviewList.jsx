@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getReviewsByBusinessId, deleteReview } from '../../redux/reviews';
 import ReviewCard from './ReviewCard';
+import './Reviews.css';
 
 const ReviewList = ({ businessId }) => {
   const dispatch = useDispatch();

@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'; // To dispatch Redux actions
 import { createReview } from '../../redux/reviews'; // Thunk to post review
 import { useModal } from '../../context/Modal'; // Custom modal hook
 import { updateReview } from '../../redux/reviews'; // thunk to update review
-
+import './Reviews.css';
 
 const UpdateReviewForm = ({ review, refreshReviews, onSuccess }) => {
     const dispatch = useDispatch();

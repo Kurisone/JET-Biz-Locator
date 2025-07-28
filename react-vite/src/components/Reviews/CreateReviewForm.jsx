@@ -4,6 +4,8 @@ import { useState } from 'react'; // For managing form state
 import { useDispatch } from 'react-redux'; // To dispatch Redux actions
 import { createReview } from '../../redux/reviews'; // Thunk to post review
 import { useModal } from '../../context/Modal'; // Custom modal hook
+import './Reviews.css';
+
 
 const CreateReviewForm = ({ businessId, onSuccess, refreshReviews }) => {
   const dispatch = useDispatch(); // Redux dispatcher

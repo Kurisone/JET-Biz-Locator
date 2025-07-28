@@ -2,6 +2,7 @@
 
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteReview, getReviewsByBusinessId } from '../../redux/reviews';
+import './Reviews.css';
 
 const ReviewCard = ({ review }) => {
     const dispatch = useDispatch();
