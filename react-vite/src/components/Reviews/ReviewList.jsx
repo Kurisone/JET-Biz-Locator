@@ -2,7 +2,8 @@
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getReviewsByBusinessId } from '../../redux/reviews';
+import { getReviewsByBusinessId, deleteReview } from '../../redux/reviews';
+import ReviewCard from './ReviewCard';
 
 const ReviewList = ({ businessId }) => {
   const dispatch = useDispatch();
@@ -19,18 +20,9 @@ const ReviewList = ({ businessId }) => {
   return (
     <div className="review-list">
       {reviewArray.length === 0 && <p>No reviews yet.</p>} 
-
+  
       {reviewArray.map(review => (
-        <div key={review.id} className="review-card">
-          <p><strong>{review.user?.firstName}</strong></p>
-          <p>{review.content}</p>
-          <p>Rating: {review.rating} / 5</p>
-          <p>{new Date(review.createdAt).toLocaleDateString()}</p>
-
-          {currentUser?.id === review.userId && (
-            <button>Delete</button> // delete logic comes later
-          )}
-        </div>
+        <ReviewCard key={review.id} review={review} />
       ))}
     </div>
   );

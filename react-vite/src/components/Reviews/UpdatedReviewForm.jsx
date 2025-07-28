@@ -1,18 +1,20 @@
-//CreateReviewForm.jsx
+//UpdateReviewForm.jsx
 
 import { useState } from 'react'; // For managing form state
 import { useDispatch } from 'react-redux'; // To dispatch Redux actions
 import { createReview } from '../../redux/reviews'; // Thunk to post review
 import { useModal } from '../../context/Modal'; // Custom modal hook
+import { updateReview } from '../../redux/reviews'; // thunk to update review
 
-const CreateReviewForm = ({ businessId, onSuccess, refreshReviews }) => {
-  const dispatch = useDispatch(); // Redux dispatcher
-  const { closeModal } = useModal(); // Close modal on submit
 
-  const [content, setContent] = useState(''); // Review text
-  const [rating, setRating] = useState(0); // 
-  const [errors, setErrors] = useState({}); // 
-  const [submitting, setSubmitting] = useState(false); // disables button while submitting
+const UpdateReviewForm = ({ review, refreshReviews, onSuccess }) => {
+    const dispatch = useDispatch();
+    const { closeModal } = useModal();
+  
+    const [content, setContent] = useState(review.content); // pre-fill from existing review
+    const [rating, setRating] = useState(review.rating);     // pre-fill rating
+    const [errors, setErrors] = useState({});
+    const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page refresh
@@ -26,7 +28,7 @@ const CreateReviewForm = ({ businessId, onSuccess, refreshReviews }) => {
     };
 
     try {
-        await dispatch(createReview(businessId, payload)).unwrap(); // Dispatch and unwrap errors if any
+        await dispatch(updateReview(businessId, payload)); // Dispatch and unwrap errors if any
         if (refreshReviews) refreshReviews(); // refresh review list after success
         closeModal(); // close the modal
         if (onSuccess) onSuccess(); // optional callback
@@ -68,7 +70,7 @@ const CreateReviewForm = ({ businessId, onSuccess, refreshReviews }) => {
             ))}
         </div>
       </label>
-      {errors.rating && <p className="error">{errors.rating}</p>}
+      {errors.rating && <p className="error">{errors.rating}</p>} 
 
         <button
         type="submit"
@@ -82,4 +84,4 @@ const CreateReviewForm = ({ businessId, onSuccess, refreshReviews }) => {
   );
 };
 
-export default CreateReviewForm;
+export default UpdateReviewForm;
