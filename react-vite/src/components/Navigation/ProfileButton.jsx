@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FaUserCircle } from 'react-icons/fa';
 import { thunkLogout } from "../../redux/session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
@@ -41,8 +40,15 @@ function ProfileButton() {
 
   return (
     <div className="profile-button-container">
-      <button onClick={toggleMenu} className="profile-button">
-        <FaUserCircle className="user-icon" />
+      <button 
+        onClick={toggleMenu} 
+        className={`profile-button ${showMenu ? 'menu-open' : ''}`}
+      >
+        <div className="hamburger-icon">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
         {user && <span className="username">{user.username}</span>}
       </button>
       {showMenu && (
