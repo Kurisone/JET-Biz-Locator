@@ -8,6 +8,8 @@ function SignupFormModal() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -24,7 +26,13 @@ function SignupFormModal() {
     }
 
     const serverResponse = await dispatch(
-      thunkSignup({ email, username, password })
+      thunkSignup({
+        email,
+        username,
+        firstName,
+        lastName,
+        password,
+      })
     );
 
     if (serverResponse) {
@@ -67,6 +75,32 @@ function SignupFormModal() {
             required
           />
           {errors.username && <div className="error-message">{errors.username}</div>}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="firstName">First Name</label>
+          <input
+            id="firstName"
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            className={`form-input ${errors.firstName ? 'error' : ''}`}
+            required
+          />
+          {errors.firstName && <div className="error-message">{errors.firstName}</div>}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="lastName">Last Name</label>
+          <input
+            id="lastName"
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            className={`form-input ${errors.lastName ? 'error' : ''}`}
+            required
+          />
+          {errors.lastName && <div className="error-message">{errors.lastName}</div>}
         </div>
 
         <div className="form-group">
