@@ -2,7 +2,6 @@
 
 import { useState } from 'react'; // For managing form state
 import { useDispatch } from 'react-redux'; // To dispatch Redux actions
-import { createReview } from '../../redux/reviews'; // Thunk to post review
 import { useModal } from '../../context/Modal'; // Custom modal hook
 import { updateReview } from '../../redux/reviews'; // thunk to update review
 import './Reviews.css';
@@ -28,7 +27,7 @@ const UpdateReviewForm = ({ review, refreshReviews, onSuccess }) => {
     };
 
     try {
-        await dispatch(updateReview(businessId, payload)); // Dispatch and unwrap errors if any
+        await dispatch(updateReview(review.id, payload)); // Dispatch and unwrap errors if any
         if (refreshReviews) refreshReviews(); // refresh review list after success
         closeModal(); // close the modal
         if (onSuccess) onSuccess(); // optional callback
