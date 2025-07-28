@@ -56,7 +56,7 @@ def sign_up():
             username=form.data['username'],
             firstName=form.data['firstName'],
             lastName=form.data['lastName'],
-            hashed_password=generate_password_hash(form.data['password'])
+            password=form.password.data
         )
         db.session.add(user)
         db.session.commit()

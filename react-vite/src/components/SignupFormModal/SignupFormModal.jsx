@@ -32,6 +32,7 @@ function SignupFormModal() {
         firstName,
         lastName,
         password,
+        confirm_password: confirmPassword
       })
     );
 
@@ -84,8 +85,8 @@ function SignupFormModal() {
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            className={`form-input ${errors.firstName ? 'error' : ''}`}
             required
+            className={errors.firstName ? 'input-error' : ''}
           />
           {errors.firstName && <div className="error-message">{errors.firstName}</div>}
         </div>
@@ -97,8 +98,8 @@ function SignupFormModal() {
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            className={`form-input ${errors.lastName ? 'error' : ''}`}
             required
+            className={errors.lastName ? 'input-error' : ''}
           />
           {errors.lastName && <div className="error-message">{errors.lastName}</div>}
         </div>
