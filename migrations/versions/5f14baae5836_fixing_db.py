@@ -1,8 +1,8 @@
-"""Fixed review_images relationship
+"""Fixing db
 
-Revision ID: 3df84ccdbfac
+Revision ID: 5f14baae5836
 Revises: 
-Create Date: 2025-07-27 21:32:38.029575
+Create Date: 2025-07-28 00:22:19.512612
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '3df84ccdbfac'
+revision = '5f14baae5836'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,8 +32,8 @@ def upgrade():
     sa.Column('username', sa.String(length=40), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=False),
     sa.Column('hashed_password', sa.String(length=255), nullable=False),
-    sa.Column('first_name', sa.String(length=50), nullable=False),
-    sa.Column('last_name', sa.String(length=50), nullable=False),
+    sa.Column('firstName', sa.String(length=50), nullable=False),
+    sa.Column('lastName', sa.String(length=50), nullable=False),
     sa.Column('profile_image_url', sa.String(length=255), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
