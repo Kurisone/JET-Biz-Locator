@@ -17,6 +17,13 @@ function Navigation() {
             <h1>JET-Biz-Locator</h1>
           </NavLink>
         </div>
+        <div className="search-container">
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="Search businesses..."
+          />
+        </div>
         <div className="nav-right">
           {!user && (
             <>

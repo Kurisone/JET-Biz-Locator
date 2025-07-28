@@ -2,6 +2,8 @@ import { useState } from "react";
 import { thunkLogin } from "../../redux/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
+import OpenModalButton from "../OpenModalButton";
+import SignupFormModal from "../SignupFormModal/SignupFormModal";
 import "./LoginForm.css";
 
 function LoginFormModal() {
@@ -24,6 +26,20 @@ function LoginFormModal() {
     if (serverResponse) {
       setErrors(serverResponse);
     } else {
+      closeModal();
+    }
+  };
+
+  const handleDemoLogin = async (e) => {
+    e.preventDefault();
+    const demoCredentials = {
+      email: "demo@aa.io",
+      password: "password"
+    };
+
+    const serverResponse = await dispatch(thunkLogin(demoCredentials));
+    
+    if (!serverResponse) {
       closeModal();
     }
   };
@@ -58,6 +74,23 @@ function LoginFormModal() {
           {errors.password && <div className="error-message">{errors.password}</div>}
         </div>
         <button type="submit" className="login-button">Log In</button>
+        <button 
+          type="button" 
+          onClick={handleDemoLogin} 
+          className="demo-user-button"
+        >
+          DEMO USER
+        </button>
+        
+        <div className="signup-prompt">
+          Not signed up for JET Biz Locator?{" "}
+          <OpenModalButton
+            buttonText="Click here!"
+            modalComponent={<SignupFormModal />}
+            buttonClass="signup-link"
+            // onButtonClick={closeModal}
+          />
+        </div>
       </form>
     </div>
   );

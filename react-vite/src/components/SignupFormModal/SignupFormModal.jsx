@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { thunkSignup } from "../../redux/session";
+import OpenModalButton from "../OpenModalButton";
+import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import "./SignupForm.css";
 
 function SignupFormModal() {
@@ -85,8 +87,8 @@ function SignupFormModal() {
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
+            className={`form-input ${errors.firstName ? 'error' : ''}`}
             required
-            className={errors.firstName ? 'input-error' : ''}
           />
           {errors.firstName && <div className="error-message">{errors.firstName}</div>}
         </div>
@@ -98,8 +100,8 @@ function SignupFormModal() {
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
+            className={`form-input ${errors.lastName ? 'error' : ''}`}
             required
-            className={errors.lastName ? 'input-error' : ''}
           />
           {errors.lastName && <div className="error-message">{errors.lastName}</div>}
         </div>
@@ -135,6 +137,16 @@ function SignupFormModal() {
         <button type="submit" className="signup-button">
           Sign Up
         </button>
+
+        <div className="login-prompt">
+          Already signed up?{" "}
+          <OpenModalButton
+            buttonText="Log in here"
+            modalComponent={<LoginFormModal />}
+            buttonClass="login-link"
+            // onButtonClick={closeModal}
+          />
+        </div>
       </form>
     </div>
   );
