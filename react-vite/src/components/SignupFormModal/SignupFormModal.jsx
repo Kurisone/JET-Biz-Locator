@@ -10,8 +10,8 @@ function SignupFormModal() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [first_name, setfirst_name] = useState("");
+  const [last_name, setlast_name] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -31,8 +31,8 @@ function SignupFormModal() {
       thunkSignup({
         email,
         username,
-        firstName,
-        lastName,
+        first_name,
+        last_name,
         password,
         confirm_password: confirmPassword
       })
@@ -81,29 +81,29 @@ function SignupFormModal() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="firstName">First Name</label>
+          <label htmlFor="first_name">First Name</label>
           <input
-            id="firstName"
+            id="first_name"
             type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            className={`form-input ${errors.firstName ? 'error' : ''}`}
+            value={first_name}
+            onChange={(e) => setfirst_name(e.target.value)}
+            className={`form-input ${errors.first_name ? 'error' : ''}`}
             required
           />
-          {errors.firstName && <div className="error-message">{errors.firstName}</div>}
+          {errors.first_name && <div className="error-message">{errors.first_name}</div>}
         </div>
 
         <div className="form-group">
-          <label htmlFor="lastName">Last Name</label>
+          <label htmlFor="last_name">Last Name</label>
           <input
-            id="lastName"
+            id="last_name"
             type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            className={`form-input ${errors.lastName ? 'error' : ''}`}
+            value={last_name}
+            onChange={(e) => setlast_name(e.target.value)}
+            className={`form-input ${errors.last_name ? 'error' : ''}`}
             required
           />
-          {errors.lastName && <div className="error-message">{errors.lastName}</div>}
+          {errors.last_name && <div className="error-message">{errors.last_name}</div>}
         </div>
 
         <div className="form-group">
