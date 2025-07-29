@@ -20,7 +20,6 @@ class Business(db.Model):
     phone = db.Column(db.String(20))
     website = db.Column(db.String(255))
     email = db.Column(db.String(100))
-    url = db.Column(db.String(255))  # URL for the business image
     price_range = db.Column(db.Integer)
     latitude = db.Column(db.Numeric(10, 8))
     longitude = db.Column(db.Numeric(11, 8))
