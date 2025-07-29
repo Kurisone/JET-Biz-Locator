@@ -109,14 +109,16 @@ def create_review(id):
 
 ## Edit Review
 ## Users should be able to update their review on a business
-@review_routes.route('/reviews/<int:review_id>', methods=['PUT'])
+@review_routes.route('/businesses/<int:business_id>/reviews/<int:review_id>', methods=['PUT'])
 @login_required
-def update_review(review_id):
+def update_review(business_id, review_id):
     data = request.get_json()
     review = Review.query.get(review_id)
 
     if not review:
         return {"error": "Review not found"}, 404
+    if review.business_id != business_id:
+        return {"error": "Review does not belong to this business"}, 400
     if review.user_id != current_user.id:
         return {"error": "Unauthorized"}, 403
     
@@ -129,19 +131,27 @@ def update_review(review_id):
 
 ## Delete Review
 ## users should be able to delete their review from a business
-@review_routes.route('/reviews/<int:review_id>', methods=['DELETE'])
+@review_routes.route('/businesses/<int:business_id>/reviews/<int:review_id>', methods=['DELETE'])
 @login_required
-def delete_review(review_id):
+def delete_review(business_id, review_id):
     review = Review.query.get(review_id)
 
     if not review:
         return {"error": "Review not found"}, 404
+    if review.business_id != business_id:
+        return {"error": "Review does not belong to this business"}, 400
     if review.user_id != current_user.id:
         return {"error": "Unauthorized"}, 403
+    
 
     db.session.delete(review)
     db.session.commit()
-    return {'message': "Review deleted"}
+
+    return {
+        'message': "Review deleted",
+        'businessId': business_id
+    }
+
 
 
 ## Review button?
