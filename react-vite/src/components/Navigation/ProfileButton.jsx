@@ -1,6 +1,6 @@
-
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 import { thunkLogout } from "../../redux/session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
@@ -31,8 +31,6 @@ function ProfileButton({ closeMenu }) {
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
 
-  const closeMenu = () => setShowMenu(false);
-
   const logout = (e) => {
     e.preventDefault();
     dispatch(thunkLogout());
@@ -40,7 +38,6 @@ function ProfileButton({ closeMenu }) {
   };
 
   return (
-
     <div className="profile-button-container">
       <button 
         onClick={toggleMenu} 
@@ -57,7 +54,29 @@ function ProfileButton({ closeMenu }) {
         <ul className="profile-dropdown" ref={ulRef}>
           {user ? (
             <>
-              <li className="dropdown-item">Hello, {user.username}</li>
+              <div className="menu-header">
+                <span className="username">Hello, {user.username}!</span>
+              </div>
+              <div className="menu-divider"></div>
+              <li className="dropdown-item">
+                <NavLink
+                  to="/my-businesses"
+                  onClick={() => setShowMenu(false)}
+                  className="menu-item"
+                >
+                  <i className="fas fa-store"></i> My Businesses
+                </NavLink>
+              </li>
+              <li className="dropdown-item">
+                <NavLink
+                  to="/businesses/new"
+                  onClick={() => setShowMenu(false)}
+                  className="menu-item"
+                >
+                  <i className="fas fa-plus"></i> Add a Business
+                </NavLink>
+              </li>
+              <div className="menu-divider"></div>
               <li className="dropdown-item">{user.email}</li>
               <li className="dropdown-item">
                 <button onClick={logout} className="logout-button">Log Out</button>
@@ -78,33 +97,12 @@ function ProfileButton({ closeMenu }) {
                   onItemClick={closeMenu}
                   modalComponent={<SignupFormModal />}
                 />
-                                    <div className="menu-header">
-                      <span className="username">Hello, {user.username}!</span>
-                    </div>
-                    <div className="menu-divider"></div>
-                    <NavLink
-                      to="/my-businesses"
-                      onClick={() => setShowMenu(false)}
-                      className="menu-item"
-                    >
-                      <i className="fas fa-store"></i> My Businesses
-                    </NavLink>
-                    <NavLink
-                      to="/businesses/new"
-                      onClick={() => setShowMenu(false)}
-                      className="menu-item"
-                    >
-                      <i className="fas fa-plus"></i> Add a Business
-                    </NavLink>
-                    <div className="menu-divider"></div>
-                    <ProfileButton closeMenu={() => setShowMenu(false)} />
               </li>
             </>
           )}
         </ul>
       )}
     </div>
-
   );
 }
 

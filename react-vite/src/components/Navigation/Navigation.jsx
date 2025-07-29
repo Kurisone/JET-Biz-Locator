@@ -1,7 +1,5 @@
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useState, useRef, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
 
