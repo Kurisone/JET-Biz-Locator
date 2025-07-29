@@ -8,7 +8,7 @@ def seed_business_images():
         {
             'business_id': 1,
             'uploaded_by_user_id': 1,
-            'image_url': 'https://images.pexels.com/photos/162539/architecture-building-amsterdam-blue-sky-162539.jpeg',
+            'image_url': 'https://img1.wsimg.com/isteam/ip/538bcd6d-a924-461e-a467-d49ed06293ca/SRO_1507-7e12095.jpg',
             'caption': 'Our storefront',
             'is_primary': True
         },
@@ -16,7 +16,28 @@ def seed_business_images():
         {
             'business_id': 2,
             'uploaded_by_user_id': 2,
-            'image_url': 'https://images.pexels.com/photos/233698/pexels-photo-233698.jpeg',
+            'image_url': 'https://media.prleap.com/image/35536/full/Prosoft-Nearshore-Office-Louisville-Kentucky-Custom-Software-Development.jpg',
+            'caption': 'Our storefront',
+            'is_primary': True
+        },
+        {
+            'business_id': 3,
+            'uploaded_by_user_id': 3,
+            'image_url': 'https://sheenashahangian.com/wp-content/uploads/2023/09/Lima-Coffee-Roasters-Fort-Collins-shop-Sheena-Shahangian-Photography-LLC-31-1024x683.jpg',
+            'caption': 'Our storefront',
+            'is_primary': True
+        },
+        {
+            'business_id': 4,
+            'uploaded_by_user_id': 1,
+            'image_url': 'https://cdn-jpogd.nitrocdn.com/sNhFSPXGHNuMqwuHxOawVuUxuAvFTliC/assets/images/optimized/rev-0a74dfb/www.smilecarolina.com/wp-content/uploads/2022/09/hero-1-1.jpeg',
+            'caption': 'Our storefront',
+            'is_primary': True
+        },
+        {
+            'business_id': 5,
+            'uploaded_by_user_id': 1,
+            'image_url': 'https://images.squarespace-cdn.com/content/v1/5ee00572606799128801f097/61385664-208e-40d8-99ed-bd9e2e4d1f44/San+Jose+Hero.jpg',
             'caption': 'Our storefront',
             'is_primary': True
         },
