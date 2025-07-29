@@ -1,12 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom';
-import LoginFormPage from '../components/LoginFormPage';
-import SignupFormPage from '../components/SignupFormPage';
+// import LoginFormPage from '../components/LoginFormPage';
+// import SignupFormPage from '../../../../possibly useless files/SignupFormPage';
+import Layout from './Layout';
+import LoginFormModal from '../components/LoginFormModal/LoginFormModal';
+import SignupFormModal from '../components/SignupFormModal/SignupFormModal';
 import AllBusinessesPage from '../components/Businesses/AllBusinessesPage';
 import BusinessDetailPage from '../components/Businesses/BusinessDetailPage';
 import AddBusinessForm from '../components/Businesses/AddBusinessForm';
 import MyBusinesses from '../components/Businesses/MyBusinesses';
 import EditBusinessForm from '../components/Businesses/EditBusinessForm';
-import Layout from './Layout';
 
 export const router = createBrowserRouter([
   {
@@ -34,11 +36,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "login",
-        element: <LoginFormPage />,
+        element: <LoginFormModal />,
       },
       {
         path: "signup",
-        element: <SignupFormPage />,
+        element: <SignupFormModal />,
       },
     ],
   },
