@@ -1,0 +1,216 @@
+.header-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-icon {
+  color: white;
+  font-size: 1.5rem;
+  transition: opacity 0.3s ease;
+}
+
+.home-icon:hover {
+  opacity: 0.8;
+}
+
+.search-container {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 2rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+/* Hamburger styles for orange header */
+.hamburger-menu {
+  position: relative;
+}
+
+.hamburger-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: opacity 0.3s ease;
+}
+
+.hamburger-button:hover {
+  opacity: 0.8;
+}
+
+.hamburger-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 1rem;
+  background: white;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 250px;
+  padding: 0.5rem 0;
+  z-index: 1000;
+}
+
+.menu-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.username {
+  font-weight: 600;
+  color: #333;
+}
+
+.menu-divider {
+  height: 1px;
+  background-color: #e6e6e6;
+  margin: 0.5rem 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+.menu-item i {
+  width: 20px;
+  color: #666;
+}
+
+.all-businesses-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.businesses-header {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  padding: 3rem 0;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.businesses-header h1 {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.businesses-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 3rem 2rem;
+}
+
+.business-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.business-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid #e6e6e6;
+  height: fit-content;
+}
+
+.business-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-color: #ff6b35;
+}
+
+.business-card h3 {
+  margin: 0 0 0.75rem 0;
+  color: #333;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.business-location {
+  color: #666;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+}
+
+.business-location::before {
+  content: "📍";
+  margin-right: 0.5rem;
+}
+
+.business-description {
+  color: #555;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .businesses-header {
+    padding: 2rem 0;
+  }
+
+  .businesses-header h1 {
+    font-size: 2rem;
+  }
+
+  .business-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .businesses-container {
+    padding: 0 1rem 2rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .business-card {
+    padding: 1rem;
+  }
+
+  .businesses-header h1 {
+    font-size: 1.75rem;
+  }
+}
