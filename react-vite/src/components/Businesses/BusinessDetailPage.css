@@ -1,0 +1,250 @@
+.business-detail-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.business-detail-header {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  padding: 1.5rem 0;
+}
+
+.breadcrumb {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.back-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.business-detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.business-detail-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.business-title-section {
+  padding: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.business-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 1rem 0;
+}
+
+.business-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.price-range {
+  color: #28a745;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.rating-placeholder {
+  color: #ffa500;
+  font-size: 1rem;
+}
+
+.business-location-main {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.business-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.business-description-section h3 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.business-description-text {
+  color: #555;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.business-info-section h3 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.info-item {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.info-value {
+  color: #666;
+  line-height: 1.5;
+}
+
+.info-value a {
+  color: #ff6b35;
+  text-decoration: none;
+}
+
+.info-value a:hover {
+  text-decoration: underline;
+}
+
+.placeholder-sections {
+  grid-column: 1 / -1;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+.placeholder-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.placeholder-section h3 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.placeholder-section p {
+  color: #666;
+  margin: 0;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-size: 1.1rem;
+}
+
+.error {
+  color: #dc3545;
+}
+
+.loading {
+  color: #666;
+}
+
+.business-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.edit-business-btn {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.edit-business-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .business-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .business-title {
+    font-size: 2rem;
+  }
+
+  .business-title-section {
+    padding: 1.5rem;
+  }
+
+  .business-detail-container {
+    padding: 1rem;
+  }
+}
+
+.business-owner-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.delete-business-btn {
+  background: #dc3545;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.delete-business-btn:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.delete-business-btn i {
+  font-size: 0.9rem;
+}

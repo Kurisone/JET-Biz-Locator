@@ -4,6 +4,11 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from './Layout';
 import LoginFormModal from '../components/LoginFormModal/LoginFormModal';
 import SignupFormModal from '../components/SignupFormModal/SignupFormModal';
+import AllBusinessesPage from '../components/Businesses/AllBusinessesPage';
+import BusinessDetailPage from '../components/Businesses/BusinessDetailPage';
+import AddBusinessForm from '../components/Businesses/AddBusinessForm';
+import MyBusinesses from '../components/Businesses/MyBusinesses';
+import EditBusinessForm from '../components/Businesses/EditBusinessForm';
 
 export const router = createBrowserRouter([
   {
@@ -11,7 +16,23 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <h1>Welcome to JET-Biz-Locator!</h1>,
+        element: <AllBusinessesPage />,
+      },
+      {
+        path: "/businesses/new",
+        element: <AddBusinessForm />,
+      },
+      {
+        path: "/businesses/:businessId/edit",
+        element: <EditBusinessForm />,
+      },
+      {
+        path: "/my-businesses",
+        element: <MyBusinesses />,
+      },
+      {
+        path: "/businesses/:businessId",
+        element: <BusinessDetailPage />,
       },
       {
         path: "login",
