@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { deleteBusiness } from '../../redux/businesses';
 import './BusinessDetailPage.css';
 
 const BusinessDetailPage = () => {
   const { businessId } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [business, setBusiness] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const user = useSelector(state => state.session.user); // this is to get the user from redux
   useEffect(() => {
     const fetchBusiness = async () => {
       try {
@@ -39,6 +45,18 @@ const BusinessDetailPage = () => {
     return '$'.repeat(Math.min(priceRange, 4));
   };
 
+  // This is delete handler
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this business? This action cannot be undone.')) {
+      try {
+        await dispatch(deleteBusiness(businessId));
+        navigate('/my-businesses');
+      } catch (error) {
+        alert('Failed to delete business. Please try again.');
+      }
+    }
+  };
+
   if (loading) return <div className="loading">Loading business details...</div>;
 
   if (error || !business) {
@@ -53,6 +71,7 @@ const BusinessDetailPage = () => {
     );
   }
 
+  const isOwner = user && business && user.id === business.owner_id // check if current user owns this business
   return (
     <div className="business-detail-page">
       <div className="business-detail-header">
@@ -66,7 +85,27 @@ const BusinessDetailPage = () => {
       <div className="business-detail-container">
         <div className="business-detail-card">
           <div className="business-title-section">
+            <div className="business-header-flex">
             <h1 className="business-title">{business.name}</h1>
+
+            {/* This is for the Edit button - Only shows for business owner: */}
+            {isOwner && (
+              <div className="business-owner-actions">
+                <Link
+                  to={`/businesses/${business.id}/edit`}
+                  className="edit-business-btn"
+                >
+                  <i className="fas fa-edit"></i> Edit Business
+                </Link>
+                <button
+                  onClick={handleDelete}
+                  className="delete-business-btn"
+                >
+                  <i className="fas fa-trash"></i> Delete Business
+                </button>
+              </div>
+            )}
+            </div>
 
             <div className="business-meta">
               <span className="price-range">

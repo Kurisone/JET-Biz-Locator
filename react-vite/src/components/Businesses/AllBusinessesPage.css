@@ -1,3 +1,115 @@
+.header-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.home-icon {
+  color: white;
+  font-size: 1.5rem;
+  transition: opacity 0.3s ease;
+}
+
+.home-icon:hover {
+  opacity: 0.8;
+}
+
+.search-container {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 2rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+/* Hamburger styles for orange header */
+.hamburger-menu {
+  position: relative;
+}
+
+.hamburger-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: opacity 0.3s ease;
+}
+
+.hamburger-button:hover {
+  opacity: 0.8;
+}
+
+.hamburger-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 1rem;
+  background: white;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 250px;
+  padding: 0.5rem 0;
+  z-index: 1000;
+}
+
+.menu-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.username {
+  font-weight: 600;
+  color: #333;
+}
+
+.menu-divider {
+  height: 1px;
+  background-color: #e6e6e6;
+  margin: 0.5rem 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+.menu-item i {
+  width: 20px;
+  color: #666;
+}
+
 .all-businesses-page {
   min-height: 100vh;
   background-color: #f5f5f5;

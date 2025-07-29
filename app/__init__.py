@@ -41,7 +41,25 @@ db.init_app(app)
 Migrate(app, db)
 
 # Application Security
-CORS(app)
+# CORS(app) # this what it was initially
+# CORS(app, origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000"])
+# CORS(app, origins="*", supports_credentials=True) -- render worked with this version
+# Get environment
+environment = os.environ.get('FLASK_ENV', 'production')
+
+if environment == 'production':
+    # In production, frontend and backend are on same domain
+    # So we can use a more restrictive CORS policy
+    CORS(app,
+         origins=["https://*.onrender.com"],  # Allows all Render subdomains
+         supports_credentials=True
+    )
+else:
+    # In development, allow local origins
+    CORS(app,
+         origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3000"],
+         supports_credentials=True
+    )
 
 
 # Since we are deploying with Docker and Flask,
