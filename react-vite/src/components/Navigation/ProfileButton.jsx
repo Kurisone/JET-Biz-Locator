@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkLogout } from "../../redux/session";
@@ -6,7 +7,7 @@ import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import SignupFormModal from "../SignupFormModal/SignupFormModal";
 import "./ProfileButton.css";
 
-function ProfileButton() {
+function ProfileButton({ closeMenu }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const user = useSelector((store) => store.session.user);
@@ -35,10 +36,11 @@ function ProfileButton() {
   const logout = (e) => {
     e.preventDefault();
     dispatch(thunkLogout());
-    closeMenu();
+    if (closeMenu) closeMenu();
   };
 
   return (
+
     <div className="profile-button-container">
       <button 
         onClick={toggleMenu} 
@@ -76,12 +78,33 @@ function ProfileButton() {
                   onItemClick={closeMenu}
                   modalComponent={<SignupFormModal />}
                 />
+                                    <div className="menu-header">
+                      <span className="username">Hello, {user.username}!</span>
+                    </div>
+                    <div className="menu-divider"></div>
+                    <NavLink
+                      to="/my-businesses"
+                      onClick={() => setShowMenu(false)}
+                      className="menu-item"
+                    >
+                      <i className="fas fa-store"></i> My Businesses
+                    </NavLink>
+                    <NavLink
+                      to="/businesses/new"
+                      onClick={() => setShowMenu(false)}
+                      className="menu-item"
+                    >
+                      <i className="fas fa-plus"></i> Add a Business
+                    </NavLink>
+                    <div className="menu-divider"></div>
+                    <ProfileButton closeMenu={() => setShowMenu(false)} />
               </li>
             </>
           )}
         </ul>
       )}
     </div>
+
   );
 }
 
