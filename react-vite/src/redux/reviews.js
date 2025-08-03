@@ -2,7 +2,7 @@
 const ADD_REVIEW = 'reviews/ADD_REVIEW'; // add a new review to state
 const SET_REVIEWS = 'reviews/SET_REVIEWS'; // for loading all reviews
 const DELETE_REVIEW = 'reviews/DELETE_REVIEW'; // delete a review by ID
-
+const ADD_IMAGE = 'reviews/ADD_IMAGE';
 // Action  creators - returns an action object that describes what happened - need it to actually update the Redux store with the new review data
 
 const addReview = (review) => ({ // Action to add a review
@@ -14,6 +14,12 @@ const setReviews = (reviews) => ({ // action creator
     type: SET_REVIEWS,
     reviews
   });
+
+const addImage = (reviewId, image) => ({
+  type: ADD_IMAGE,
+  reviewId,
+  image
+});
 
 const deleteReviewAction = (reviewId) => ({
     type: DELETE_REVIEW,
@@ -39,6 +45,26 @@ export const createReview = (businessId, payload) => async (dispatch) => {
     } else {
         throw res; // let component catch and handle error
     }
+};
+
+export const uploadReviewImage = (reviewId, imageFile) => async (dispatch) => {
+  const formData = new FormData();
+  formData.append('image', imageFile);
+  
+  const response = await fetch(`/api/reviews/${reviewId}/images`, {
+    method: 'POST',
+    body: formData,
+    credentials: 'include'
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(addImage(reviewId, data));
+    return data;
+  } else {
+    const error = await response.json();
+    throw error;
+  }
 };
 
 // fetches ALL REVIEWS for a specific BUSINESS from the backend and stores them in REDUX (by review ID) 
@@ -84,6 +110,14 @@ export default function reviewsReducer(state = initialState, action) {
         delete newState[action.reviewId]; // remove deleted review from state
         return newState;
       }
+      case ADD_IMAGE:
+        return {
+          ...state,
+          [action.reviewId]: {
+            ...state[action.reviewId],
+            images: [...(state[action.reviewId].images || []), action.image]
+          }
+        };
       default:
         return state; // return unchanged state for other actions
     }
