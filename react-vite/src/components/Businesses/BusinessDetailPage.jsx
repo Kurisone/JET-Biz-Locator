@@ -31,7 +31,7 @@ const BusinessDetailPage = () => {
           const data = await response.json();
           setBusiness(data);
           setBusinessImages(data.images || []);
-          
+
           // Fetch reviews for this business
           dispatch(getReviewsByBusinessId(businessId));
         } else {
@@ -53,6 +53,32 @@ const BusinessDetailPage = () => {
   const renderPriceRange = (priceRange) => {
     if (!priceRange) return '';
     return '$'.repeat(Math.min(priceRange, 4));
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const response = await fetch(`/api/businesses/${businessId}/images`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const newImage = await response.json();
+        setBusinessImages((prevImages) => [...prevImages, newImage]);
+      } else {
+        const error = await response.json();
+        alert(error.message || 'Failed to upload image');
+      }
+    } catch (err) {
+      console.error('Image upload failed:', err);
+      alert('An error occurred while uploading the image.');
+    }
   };
 
   const handleDelete = async () => {
@@ -87,11 +113,11 @@ const BusinessDetailPage = () => {
   }
 
   const isOwner = user && business && user.id === business.owner_id;
-  
+
   // Calculate average rating
   const calculateAverageRating = () => {
     if (!reviews || Object.keys(reviews).length === 0) return 0;
-    
+
     const reviewArray = Object.values(reviews);
     const total = reviewArray.reduce((sum, review) => sum + review.rating, 0);
     return (total / reviewArray.length).toFixed(1);
@@ -114,7 +140,7 @@ const BusinessDetailPage = () => {
           <div className="business-title-section">
             <div className="business-header-flex">
               <h1 className="business-title">{business.name}</h1>
-              
+
               {/* Edit/Delete buttons for owner */}
               {isOwner && (
                 <div className="business-owner-actions">
@@ -197,6 +223,17 @@ const BusinessDetailPage = () => {
             {/* Business Images Section */}
             <div className="images-section">
               <BusinessImages images={businessImages} />
+              {isOwner && (
+                <label className="upload-button">
+                  <i className="fas fa-upload"></i> Add Image
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={handleImageUpload}
+                  />
+                </label>
+              )}
             </div>
 
             {/* Reviews Section */}
@@ -205,7 +242,7 @@ const BusinessDetailPage = () => {
                 <h3>Customer Reviews</h3>
                 <ReviewButton business={business} reviews={reviews} />
               </div>
-              
+
               <ReviewList businessId={businessId} />
             </div>
           </div>
