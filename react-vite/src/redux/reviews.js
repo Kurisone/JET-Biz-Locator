@@ -47,14 +47,14 @@ export const createReview = (businessId, payload) => async (dispatch) => {
   }
 };
 
-export const uploadReviewImage = (reviewId, imageFile) => async (dispatch) => {
-  const formData = new FormData();
-  formData.append('image', imageFile);
-  
+export const uploadReviewImage = (reviewId, imageData) => async (dispatch) => {
   const response = await fetch(`/api/reviews/${reviewId}/images`, {
     method: 'POST',
-    body: formData,
-    credentials: 'include'
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(imageData)
   });
 
   if (response.ok) {
