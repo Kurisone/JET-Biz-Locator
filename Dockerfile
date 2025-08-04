@@ -18,6 +18,4 @@ RUN pip install psycopg2
 COPY . .
 
 RUN python create_tables.py
-RUN flask seed undo
-RUN flask seed all
 CMD gunicorn app:app
