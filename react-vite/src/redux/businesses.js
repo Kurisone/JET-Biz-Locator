@@ -39,6 +39,12 @@ const deleteBusinessAction = (businessId) => ({
 
 // Thunk Action
 export const fetchAllBusinesses = (params = {}) => async (dispatch) => {
+  const cleanParams = {};
+Object.entries(params).forEach(([key, value]) => {
+  if (value !== undefined && value !== 'undefined' && value !== '') {
+    cleanParams[key] = value;
+  }
+});
   const queryParams = new URLSearchParams(params).toString();
   const response = await fetch(`/api/businesses?${queryParams}`);
 

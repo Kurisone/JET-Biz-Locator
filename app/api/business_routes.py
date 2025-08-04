@@ -23,7 +23,7 @@ def get_all_businesses():
     # Then get search/filter paramters from the url query string
     search = request.args.get('search', '').strip()
     category = request.args.get('category', '').strip()
-    price = request.args.get('price')
+    price = request.args.get('price', '').strip()
 
     # search by business name
     if search:
@@ -40,9 +40,8 @@ def get_all_businesses():
             query = query.join(Business.categories).filter(Category.name.ilike(f'%{category}%')) # filter by category name (case-insensitive, partial match)
 
     # search by price
-    if price:
-
-        query = query.filter(Business.price_range == int(price)) # this is when there is Exact price match
+    if price and price.isdigit():
+        query = query.filter(Business.price_range == int(price))
 
 
         # Pagination parameters
