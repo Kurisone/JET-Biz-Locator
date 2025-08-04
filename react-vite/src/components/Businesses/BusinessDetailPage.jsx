@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteBusiness } from '../../redux/businesses';
+import { updateBusiness, deleteBusiness } from '../../redux/businesses';
 import { getReviewsByBusinessId } from '../../redux/reviews';
 import BusinessImages from '../Images/BusinessImages';
 import ReviewList from '../Reviews/ReviewList';
@@ -20,6 +20,9 @@ const BusinessDetailPage = () => {
 
   const user = useSelector(state => state.session.user);
   const reviews = useSelector(state => state.reviews);
+
+  const [newImageUrl, setNewImageUrl] = useState('');
+  const [imageError, setImageError] = useState('');
 
   useEffect(() => {
     const fetchBusiness = async () => {
@@ -55,32 +58,6 @@ const BusinessDetailPage = () => {
     return '$'.repeat(Math.min(priceRange, 4));
   };
 
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append('image', file);
-
-    try {
-      const response = await fetch(`/api/businesses/${businessId}/images`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        const newImage = await response.json();
-        setBusinessImages((prevImages) => [...prevImages, newImage]);
-      } else {
-        const error = await response.json();
-        alert(error.message || 'Failed to upload image');
-      }
-    } catch (err) {
-      console.error('Image upload failed:', err);
-      alert('An error occurred while uploading the image.');
-    }
-  };
-
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this business? This action cannot be undone.')) {
       try {
@@ -89,6 +66,33 @@ const BusinessDetailPage = () => {
       } catch (error) {
         alert('Failed to delete business. Please try again.');
       }
+    }
+  };
+
+  const handleAddImage = async () => {
+    if (!newImageUrl.trim()) {
+      setImageError('Image URL is required');
+      return;
+    }
+
+    if (!business) return;
+
+    try {
+      const updatedImages = [...(business.images || []), newImageUrl.trim()];
+
+      const updatedBusiness = {
+        ...business,
+        images: updatedImages
+      };
+
+      const result = await dispatch(updateBusiness(business.id, updatedBusiness));
+      setBusiness(result);
+      setBusinessImages(result.images || []);
+      setNewImageUrl('');
+      setImageError('');
+    } catch (err) {
+      setImageError('Failed to add image. Please try again.');
+      console.error(err);
     }
   };
 
@@ -224,15 +228,18 @@ const BusinessDetailPage = () => {
             <div className="images-section">
               <BusinessImages images={businessImages} />
               {isOwner && (
-                <label className="upload-button">
-                  <i className="fas fa-upload"></i> Add Image
+                <div className="add-image-form">
                   <input
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    onChange={handleImageUpload}
+                    type="text"
+                    placeholder="Enter image URL"
+                    value={newImageUrl}
+                    onChange={(e) => setNewImageUrl(e.target.value)}
                   />
-                </label>
+                  <button onClick={handleAddImage} className="add-image-btn">
+                    Add Image
+                  </button>
+                  {imageError && <div className="field-error">{imageError}</div>}
+                </div>
               )}
             </div>
 

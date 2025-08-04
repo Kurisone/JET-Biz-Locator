@@ -202,4 +202,29 @@
   margin-bottom: 20px;
   font-size: 18px;
 }
+.add-image-form {
+  margin: 1rem 0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.add-image-form input {
+  flex-grow: 1;
+  padding: 8px;
+}
+
+.add-image-btn {
+  padding: 8px 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.field-error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
 
