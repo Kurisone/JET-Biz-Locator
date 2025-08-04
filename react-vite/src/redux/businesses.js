@@ -38,14 +38,17 @@ const deleteBusinessAction = (businessId) => ({
 });
 
 // Thunk Action
-export const fetchAllBusinesses = () => async (dispatch) => {
-  //const response = await fetch('/api/businesses');
-  const response = await fetch('/api/businesses/');
+export const fetchAllBusinesses = (params = {}) => async (dispatch) => {
+  const queryParams = new URLSearchParams(params).toString();
+  const response = await fetch(`/api/businesses?${queryParams}`);
 
   if (response.ok) {
     const data = await response.json();
-    dispatch(loadBusinesses(data.businesses));
+    dispatch(loadBusinesses(data.businesses)); 
     return data;
+  } else {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to fetch businesses');
   }
 };
 
