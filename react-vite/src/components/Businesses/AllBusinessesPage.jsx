@@ -1,23 +1,22 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { fetchAllBusinesses } from '../../redux/businesses';
 import { FaHome, FaBars, FaImage } from 'react-icons/fa';
 import { useState, useRef } from 'react';
-import queryString from 'query-string';
 import { Link } from 'react-router-dom';
 import ProfileButton from '../Navigation/ProfileButton';
 import './AllBusinessesPage.css';
 
 const AllBusinessesPage = () => {
   const dispatch = useDispatch();
+  const filters = useSelector(state => state.businesses.filters);
   const businesses = useSelector((state) => state.businesses.allBusinesses || {});
   const user = useSelector(state => state.session.user);
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
-  const location = useLocation();
-  const { search, category, price, page = 1 } = queryString.parse(location.search);
+  
   // Convert businesses object to array for easier mapping
   
   const businessesArray = Object.values(businesses).map(business => {
@@ -30,8 +29,8 @@ const AllBusinessesPage = () => {
   });
 
   useEffect(() => {
-    dispatch(fetchAllBusinesses({search, category, price, page}));
-  }, [dispatch, search, category, price, page]);
+    dispatch(fetchAllBusinesses(filters));
+  }, [dispatch, filters]);
 
   const handleBusinessClick = (businessId) => {
     navigate(`/businesses/${businessId}`);

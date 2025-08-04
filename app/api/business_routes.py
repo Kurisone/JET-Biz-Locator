@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from sqlalchemy.orm import joinedload
 from datetime import datetime
 from app.models import Business, BusinessImage, db, Review, Category  # Import models
@@ -23,7 +23,7 @@ def get_all_businesses():
     # Then get search/filter paramters from the url query string
     search = request.args.get('search', '').strip()
     category = request.args.get('category', '').strip()
-    price = request.args.get('price', '').strip()
+    price = request.args.get('price')
 
     # search by business name
     if search:
@@ -40,19 +40,12 @@ def get_all_businesses():
             query = query.join(Business.categories).filter(Category.name.ilike(f'%{category}%')) # filter by category name (case-insensitive, partial match)
 
     # search by price
-    if price and price.isdigit():
-        query = query.filter(Business.price_range == int(price))
+    if price:
+
+        query = query.filter(Business.price_range == int(price)) # this is when there is Exact price match
 
 
-        # Pagination parameters
-    page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 10, type=int)
-
-    pagination = query.options(joinedload(Business.business_images)).paginate(
-        page=page, per_page=per_page, error_out=False
-    )
-
-    businesses = pagination.items
+    businesses = query.options(joinedload(Business.business_images)).all()
     
     business_list = []
     for business in businesses:
@@ -66,12 +59,7 @@ def get_all_businesses():
     
     return {
         "businesses": business_list,
-        "pagination": {
-            "page": pagination.page,
-            "pages": pagination.pages,
-            "per_page": pagination.per_page,
-            "total": pagination.total
-        },
+        "total_results": len(business_list),
         "search_params": {
             "search": search or None,
             "category": category or None,

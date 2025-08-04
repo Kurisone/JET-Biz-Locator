@@ -11,6 +11,7 @@ const getCsrfToken = () => {
 };
 
 // Action Types
+const SET_FILTERS = 'businesses/SET_FILTERS';
 const LOAD_ALL_BUSINESSES = 'businesses/LOAD_ALL_BUSINESSES';
 const ADD_BUSINESS = 'businesses/ADD_BUSINESS';
 const UPDATE_BUSINESS = 'businesses/UPDATE_BUSINESS';
@@ -20,6 +21,11 @@ const DELETE_BUSINESS = 'businesses/DELETE_BUSINESS';
 const loadBusinesses = (businesses) => ({
   type: LOAD_ALL_BUSINESSES,
   businesses
+});
+
+export const setFilters = (filters) => ({
+  type: SET_FILTERS,
+  filters
 });
 
 const addBusiness = (business) => ({
@@ -136,7 +142,12 @@ export const deleteBusiness = (businessId) => async (dispatch) => {
 
 // Initial State
 const initialState = {
-  allBusinesses: {}
+  allBusinesses: {},
+  filters: {
+    search: '',
+    category: '',
+    priceRange: ''
+  } 
 };
 
 // Reducer
@@ -165,6 +176,15 @@ export const businessesReducer = (state = initialState, action) => {
         allBusinesses: {
           ...state.allBusinesses,
           [action.business.id]: action.business
+        }
+      };
+    }
+    case SET_FILTERS: {
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          ...action.filters
         }
       };
     }
