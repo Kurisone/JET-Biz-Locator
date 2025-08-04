@@ -206,36 +206,3 @@
   cursor: not-allowed;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .edit-business-header {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-
-  .edit-business-container {
-    padding: 1rem;
-  }
-
-  .edit-business-form {
-    padding: 1.5rem;
-  }
-
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-
-  .hours-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .form-actions {
-    flex-direction: column;
-  }
-
-  .cancel-button,
-  .submit-button {
-    width: 100%;
-  }
-}

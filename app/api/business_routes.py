@@ -1,4 +1,6 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
+from sqlalchemy.orm import joinedload
+from datetime import datetime
 from app.models import Business, BusinessImage, db, Review, Category  # Import models
 from flask_login import current_user, login_required  # This is needed for later
 from sqlalchemy import desc, asc, or_, and_ #import sorting helpers and or_ and and_ for queries
@@ -43,10 +45,18 @@ def get_all_businesses():
         query = query.filter(Business.price_range == int(price)) # this is when there is Exact price match
 
 
-    businesses = query.all() # execute the query
-    business_list = [business.to_dict() for business in businesses] # convert each business to dictionary
-
-    # return the result in proper format with additional info
+    businesses = query.options(joinedload(Business.business_images)).all()
+    
+    business_list = []
+    for business in businesses:
+        biz_dict = business.to_dict()
+        # Add first image URL if available
+        if business.business_images:
+            biz_dict['images'] = [img.to_dict() for img in business.business_images]
+        else:
+            biz_dict['images'] = []
+        business_list.append(biz_dict)
+    
     return {
         "businesses": business_list,
         "total_results": len(business_list),
@@ -56,18 +66,24 @@ def get_all_businesses():
             "price": price
         }
     }
-
 # Get a single business by ID
 # Query business by ID
 # Handle if not found (return 404)
 # Return business.to_dict()
 @business_routes.route('/<int:id>')
 def get_single_business(id):
-    business = Business.query.get(id)
+    business = Business.query.options(
+        joinedload(Business.business_images),
+        joinedload(Business.categories)
+    ).get(id)
 
     if not business:
-      return {"error": "Business not found"}, 404
-    return business.to_dict()
+        return {"error": "Business not found"}, 404
+    
+    # Serialize with relationships
+    business_dict = business.to_dict()
+    business_dict['reviews'] = [review.to_dict() for review in business.reviews]
+    return business_dict
 
 # Create a new business
 # Get JSON data from request
@@ -198,6 +214,62 @@ def get_my_businesses():
     return {"businesses": business_list}
 
 
+
+@business_routes.route('/<int:business_id>/reviews', methods=['POST'])
+@login_required
+def create_review(business_id):
+    business = Business.query.get(business_id)
+    if not business:
+        return jsonify({"message": "Business not found"}), 404
+        
+    data = request.get_json()
+    
+    # Validation
+    errors = {}
+    if not data.get('content'):
+        errors["content"] = "Review content cannot be empty"
+    if not data.get('rating') or not (1 <= data['rating'] <= 5):
+        errors["rating"] = "Rating must be between 1 and 5"
+    if errors:
+        return jsonify({"message": "Validation error", "errors": errors}), 400
+
+    # Check for existing review
+    existing = Review.query.filter_by(
+        user_id=current_user.id, 
+        business_id=business_id
+    ).first()
+    if existing:
+        return jsonify({"message": "You have already reviewed this business"}), 409
+
+    # Create review
+    new_review = Review(
+        user_id=current_user.id,
+        business_id=business_id,
+        rating=data['rating'],
+        title=data.get('title', ''),
+        content=data['content'],
+        created_at=datetime.utcnow()
+    )
+    db.session.add(new_review)
+    db.session.commit()
+
+    # Handle image if provided
+    if data.get('image_url'):
+        new_image = ReviewImage(
+            review_id=new_review.id,
+            uploaded_by_user_id=current_user.id,
+            image_url=data['image_url'],
+            caption=data.get('caption', ''),
+            created_at=datetime.utcnow()
+        )
+        db.session.add(new_image)
+        db.session.commit()
+        
+        review_data = new_review.to_dict()
+        review_data['images'] = [new_image.to_dict()]
+        return jsonify(review_data), 201
+    
+    return jsonify(new_review.to_dict()), 201
 ## Added to Business_routes to be nested under business
 ## if you are getting reviews that belong to business, it has to be nested under business.
 @business_routes.route('/<int:id>/reviews')

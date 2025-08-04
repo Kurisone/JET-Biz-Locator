@@ -27,6 +27,7 @@ class Review(db.Model):
             "businessId": self.business_id,
             "rating": self.rating,
             "title": self.title,
+            'images': [image.to_dict() for image in self.review_images],
             "content": self.content,
             "createdAt": self.created_at,
             "user": self.user.to_dict() if self.user else None # optional, for frontend

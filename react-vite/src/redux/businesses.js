@@ -57,8 +57,10 @@ export const createBusiness = (businessData) => async (dispatch) => {
       'Content-Type': 'application/json',
       'X-CSRFToken': getCsrfToken()
     },
-    credentials: 'include',
-    body: JSON.stringify(businessData)
+    body: JSON.stringify({
+      ...businessData,
+      images: businessData.images || []
+    })
   });
 
   if (response.ok) {
@@ -104,6 +106,7 @@ export const deleteBusiness = (businessId) => async (dispatch) => {
     const response = await fetch(`/api/businesses/${businessId}`, {
       method: 'DELETE',
       headers: {
+        'Content-Type': 'application/json',
         'X-CSRFToken': getCsrfToken()
       },
       credentials: 'include'
@@ -144,17 +147,17 @@ export const businessesReducer = (state = initialState, action) => {
       newState.allBusinesses = {
         ...newState.allBusinesses,
         [action.business.id]: action.business
-    };
+      };
       return newState;
     }
     case UPDATE_BUSINESS: {
-        return {
-          ...state,
-          allBusinesses: {
-            ...state.allBusinesses,
-            [action.business.id]: action.business
-          }
-        };
+      return {
+        ...state,
+        allBusinesses: {
+          ...state.allBusinesses,
+          [action.business.id]: action.business
+        }
+      };
     }
     case DELETE_BUSINESS: {
       const newState = { ...state };

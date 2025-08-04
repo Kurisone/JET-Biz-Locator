@@ -1,16 +1,27 @@
-// Action Types - redux needs a type to know what action is being dispatched so the reducer can respond accordingly
-const ADD_REVIEW = 'reviews/ADD_REVIEW'; // add a new review to state
-const SET_REVIEWS = 'reviews/SET_REVIEWS'; // for loading all reviews
-const DELETE_REVIEW = 'reviews/DELETE_REVIEW'; // delete a review by ID
-const ADD_IMAGE = 'reviews/ADD_IMAGE';
-// Action  creators - returns an action object that describes what happened - need it to actually update the Redux store with the new review data
+const getCsrfToken = () => {
+  const cookies = document.cookie.split(';');
+  for (let cookie of cookies) {
+    const [name, value] = cookie.trim().split('=');
+    if (name === 'csrf_token') {
+      return decodeURIComponent(value);
+    }
+  }
+  return null;
+};
 
-const addReview = (review) => ({ // Action to add a review
+// Action Types
+const ADD_REVIEW = 'reviews/ADD_REVIEW';
+const SET_REVIEWS = 'reviews/SET_REVIEWS';
+const DELETE_REVIEW = 'reviews/DELETE_REVIEW';
+const ADD_IMAGE = 'reviews/ADD_IMAGE';
+
+// Action Creators
+const addReview = (review) => ({
   type: ADD_REVIEW,
   review
 });
 
-const setReviews = (reviews) => ({ // action creator
+const setReviews = (reviews) => ({
   type: SET_REVIEWS,
   reviews
 });
@@ -26,32 +37,47 @@ const deleteReviewAction = (reviewId) => ({
   reviewId
 });
 
-// Thunk to create a new review - THIS sends the review to your backend using a POST request.
-// If successful, it dispatches the addReview action to update the REDUX state.
-// REDUX can't handle async logic(like fetch) directly. you neeed a thunk to perform the async request,
-// then dispatch a regular action with the result.
-
+// Thunks
 export const createReview = (businessId, payload) => async (dispatch) => {
-  const res = await fetch(`/api/reviews/businesses/${businessId}/reviews`, { // POST to backend
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const response = await fetch(`/api/businesses/${businessId}/reviews`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCsrfToken()
+      },
+      credentials: 'include',
+      body: JSON.stringify(payload)
+    });
 
-  if (res.ok) {
-    const data = await res.json(); // get newly created review
-    dispatch(addReview(data)); // add it to Redux store
-    return data;
-  } else {
-    throw res; // let component catch and handle error
+    if (!response.ok) {
+      // Handle non-2xx responses
+      const errorData = await response.text(); // First try to read as text
+      try {
+        // If it's JSON, parse it
+        return { error: JSON.parse(errorData) };
+      } catch {
+        // If not JSON, return the raw text
+        return { error: errorData };
+      }
+    }
+
+    const data = await response.json();
+    dispatch({ type: ADD_REVIEW, review: data });
+    return data; // Return the created review data
+
+  } catch (error) {
+    console.error('Create review error:', error);
+    return { error: error.message };
   }
 };
 
 export const uploadReviewImage = (reviewId, imageData) => async (dispatch) => {
-  const response = await fetch(`/api/reviews/${reviewId}/images`, {
+  const response = await fetch(`/api/review-images/${reviewId}/images`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'X-CSRFToken': getCsrfToken()
     },
     credentials: 'include',
     body: JSON.stringify(imageData)
@@ -67,88 +93,107 @@ export const uploadReviewImage = (reviewId, imageData) => async (dispatch) => {
   }
 };
 
-// fetches ALL REVIEWS for a specific BUSINESS from the backend and stores them in REDUX (by review ID) 
 export const getReviewsByBusinessId = (businessId) => async (dispatch) => {
-  const res = await fetch(`/api/reviews/businesses/${businessId}/reviews`); // GET request to backend
+  const response = await fetch(`/api/businesses/${businessId}/reviews`, {
+    credentials: 'include'
+  });
 
-  if (res.ok) {
-    const data = await res.json(); // get JSON response
+  if (response.ok) {
+    const data = await response.json();
 
-    const normalized = {}; // normalize array into object by id
+    const normalized = {};
     data.reviews.forEach(review => {
       normalized[review.id] = review;
     });
 
-    dispatch(setReviews(normalized)); // update Redux store with reviews
+    dispatch(setReviews(normalized));
+    return data;
   } else {
-    throw res; // let component catch error if needed
+    const error = await response.json();
+    throw error;
   }
 };
 
-// Initial state
-// All Redux reducers need an initial state to return on first load.
-// This ensures reviews start as an empty object
+export const updateReview = (reviewId, payload) => async (dispatch) => {
+  const response = await fetch(`/api/reviews/${reviewId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCsrfToken()
+    },
+    credentials: 'include',
+    body: JSON.stringify(payload)
+  });
 
-const initialState = {}; // Reviews stored by id
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(addReview(data));
+    return data;
+  } else {
+    const error = await response.json();
+    throw error;
+  }
+};
 
-// ********** REDUCER - listens for the ADD_REVIEW action. when it sees it, it adds the new review to the REDUX 
-// state using its ID as the key
-// Reducers are how Redux actually stores and updates the state in response to actions.
+export const deleteReview = (reviewId) => async (dispatch) => {
+  try {
+    const response = await fetch(`/api/reviews/${reviewId}`, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCsrfToken()
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to delete review');
+    }
+
+    const data = await response.json();
+    dispatch(deleteReviewAction(data.reviewId));
+    return data;
+
+  } catch (error) {
+    console.error('Delete review error:', error);
+    throw error;
+  }
+};
+
+// Reducer
+const initialState = {};
 
 export default function reviewsReducer(state = initialState, action) {
   switch (action.type) {
-    case ADD_REVIEW: {
-      const newState = { ...state };     // copy existing state
-      newState[action.review.id] = action.review; // add new review by ID
-      return newState;
-    }
-    case SET_REVIEWS: {
-      return { ...action.reviews }; // replace all reviews with new set
-    }
+    case ADD_REVIEW:
+      return {
+        ...state,
+        [action.review.id]: {
+          ...action.review,
+          images: action.review.images || []
+        }
+      };
+    
     case DELETE_REVIEW: {
       const newState = { ...state };
-      delete newState[action.reviewId]; // remove deleted review from state
+      delete newState[action.reviewId];
       return newState;
     }
+    
+    case SET_REVIEWS:
+      return { ...action.reviews };
+    
     case ADD_IMAGE:
       return {
         ...state,
         [action.reviewId]: {
           ...state[action.reviewId],
-          images: [...(state[action.reviewId].images || []), action.image]
+          images: [...(state[action.reviewId]?.images || []), action.image]
         }
       };
+    
     default:
-      return state; // return unchanged state for other actions
+      return state;
   }
 }
-
-export const deleteReview = (reviewId) => async (dispatch) => {
-  const res = await fetch(`/api/reviews/reviews/${reviewId}`, {
-    method: 'DELETE'
-  });
-
-  if (res.ok) {
-    dispatch(deleteReviewAction(reviewId)); // update Redux
-  } else {
-    const error = await res.json();
-    throw error; // can be caught in the component
-  }
-};
-
-export const updateReview = (reviewId, payload) => async (dispatch) => {
-  const res = await fetch(`/api/reviews/reviews/${reviewId}`, {  // 
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-
-  if (res.ok) {
-    const data = await res.json();
-    dispatch(addReview(data));
-    return data;
-  } else {
-    const error = await res.json();
-    throw error;
-  }
-};

@@ -78,6 +78,8 @@ class Business(db.Model):
         'website': self.website,
         'email': self.email,
         'price_range': self.price_range,
+        'images': [image.to_dict() for image in self.business_images],
+        'categories': [category.to_dict() for category in self.categories],
         'latitude': float(self.latitude) if self.latitude else None,
         'longitude': float(self.longitude) if self.longitude else None,
         'is_active': self.is_active,

@@ -1,4 +1,4 @@
-
+import './ReviewImages.css';
 const ReviewImages = ({ images, reviewId }) => {
   if (!images || images.length === 0) {
     return null;

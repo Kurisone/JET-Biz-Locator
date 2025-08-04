@@ -1,4 +1,3 @@
-
 import './BusinessImages.css';
 
 const BusinessImages = ({ images }) => {

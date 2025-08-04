@@ -8,6 +8,7 @@ function Navigation() {
 
   return (
     <>
+    <div className="page-content">
       <nav className="nav-container">
         <div className="nav-left">
           <NavLink to="/" className="nav-logo">
@@ -43,6 +44,7 @@ function Navigation() {
           <ProfileButton />
         </div>
       </nav>
+    </div>
     </>
   );
 }

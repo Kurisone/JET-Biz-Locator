@@ -1,43 +1,34 @@
-// ReviewList.jsx - "Post" or "Delete" button
+// ReviewButton.jsx
+import OpenModalButton from '../OpenModalButton';
+import CreateReviewForm from './CreateReviewForm';
+import { useSelector, useDispatch } from 'react-redux';
+import { getReviewsByBusinessId } from '../../redux/reviews';
 
-import { useSelector, useDispatch } from "react-redux"; //access Redux state
-import { getReviewsByBusinessId } from "../../redux/reviews";
-import OpenModalButton from '../OpenModalButton'; //reusable modal tirgger
-import CreateReviewForm from './CreateReviewForm'; // the form modal
+const ReviewButton = ({ business, reviews }) => {
+  const currentUser = useSelector(state => state.session.user);
+  const dispatch = useDispatch();
+  
+  
+  if (!currentUser || business.owner_id === currentUser.id) return null;
+  
+  const alreadyReviewed = Object.values(reviews).some(
+    review => review.user_id === currentUser.id
+  );
+  
+  if (alreadyReviewed) return null;
 
-// Props: business (object with id & ownerId) and reviews (normalized object of reviews)
-const ReviewButton = ({ business, reviews}) => {
-    const currentUser = useSelector(state => state.session.user);
-    const dispatch = useDispatch();
-    
-    const refreshReviews = () => {
-        dispatch(getReviewsByBusinessId(business.id));
-    };
-    
-// CONDITIONAL "post your review" button
-
-    if (!currentUser) return null; //if not logged in , no button
-    if (business.ownerId === currentUser.id) return null; // Owner of business, no button
-
-    const alreadyReviewed = Object.values(reviews).some(
-        review => review.userId === currentUser.id
-    );
-    if (alreadyReviewed) return null;
-
-
-     // If all checks passed -> show "Post your Review" button
-
-     return (
-        <OpenModalButton
-        buttonText ="Post Your Review"
-        modalComponent={
-            <CreateReviewForm
-            businessId={business.id}
-            refreshReviews={refreshReviews}
-            />
-        }
+  return (
+    <OpenModalButton
+      buttonText="Write a Review"
+      modalComponent={
+        <CreateReviewForm 
+          businessId={business.id}
+          refreshReviews={() => dispatch(getReviewsByBusinessId(business.id))}
+        />
+      }
+      buttonClass="review-button"
     />
-     );
+  );
 };
 
 export default ReviewButton;

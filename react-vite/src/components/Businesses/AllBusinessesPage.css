@@ -1,42 +1,39 @@
-.header-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 2rem;
+/* Container */
+.all-businesses-page {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background-color: #fff;
+}
+
+/* Header */
+.businesses-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.header-nav {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 .home-icon {
-  color: white;
-  font-size: 1.5rem;
-  transition: opacity 0.3s ease;
+  font-size: 28px;
+  color: #d32323; /* Yelp's signature red */
+  transition: color 0.3s ease;
 }
 
 .home-icon:hover {
-  opacity: 0.8;
+  color: #a81b1b;
 }
 
-.search-container {
-  flex: 1;
-  max-width: 500px;
-  margin: 0 2rem;
-}
-
-.search-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: none;
-  border-radius: 25px;
-  font-size: 1rem;
-  outline: none;
-}
-
-.search-input::placeholder {
-  color: #999;
-}
-
-/* Hamburger styles for orange header */
 .hamburger-menu {
   position: relative;
 }
@@ -44,173 +41,152 @@
 .hamburger-button {
   background: none;
   border: none;
-  color: white;
-  font-size: 1.5rem;
+  font-size: 24px;
   cursor: pointer;
-  padding: 0.5rem;
-  transition: opacity 0.3s ease;
-}
-
-.hamburger-button:hover {
-  opacity: 0.8;
+  color: #333;
 }
 
 .hamburger-dropdown {
   position: absolute;
+  top: 35px;
   right: 0;
-  top: 100%;
-  margin-top: 1rem;
   background: white;
-  border: 1px solid #e6e6e6;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  min-width: 250px;
-  padding: 0.5rem 0;
-  z-index: 1000;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  min-width: 180px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 10;
 }
 
 .menu-header {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e6e6e6;
-}
-
-.username {
+  padding: 10px 15px;
   font-weight: 600;
-  color: #333;
+  color: #555;
 }
 
 .menu-divider {
   height: 1px;
-  background-color: #e6e6e6;
-  margin: 0.5rem 0;
+  background: #eee;
+  margin: 5px 0;
 }
 
 .menu-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
+  display: block;
+  padding: 10px 15px;
   color: #333;
   text-decoration: none;
+  font-size: 14px;
   transition: background-color 0.2s ease;
-  cursor: pointer;
-  width: 100%;
-  border: none;
-  background: none;
-  text-align: left;
-  font-size: 1rem;
 }
 
 .menu-item:hover {
   background-color: #f5f5f5;
+  color: #d32323;
 }
 
-.menu-item i {
-  width: 20px;
-  color: #666;
-}
-
-.all-businesses-page {
-  min-height: 100vh;
-  background-color: #f5f5f5;
-}
-
-.businesses-header {
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
-  padding: 3rem 0;
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
+/* Title */
 .businesses-header h1 {
-  color: white;
   font-size: 2.5rem;
-  font-weight: 600;
+  font-weight: 700;
+  color: #d32323;
   margin: 0;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
+/* Grid Container */
 .businesses-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem 3rem 2rem;
+  width: 100%;
 }
 
 .business-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  max-width: 100%;
+  width: 100%;
+  max-height: 75%;
+  height: auto;
+  grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+  gap: 25px;
 }
 
+/* Business Cards */
 .business-card {
   background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  border: 1px solid #e6e6e6;
-  height: fit-content;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.15);
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-width: 80%;
+  width: 100%;
+  max-height: 80%;
+  height: auto;
 }
 
 .business-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  border-color: #ff6b35;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.25);
+  transform: translateY(-5px);
 }
 
-.business-card h3 {
-  margin: 0 0 0.75rem 0;
-  color: #333;
-  font-size: 1.4rem;
-  font-weight: 600;
+.business-card-image-container {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.business-card-image {
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.business-card:hover .business-card-image {
+  transform: scale(1.05);
+}
+
+.image-placeholder {
+  color: #bbb;
+  font-size: 50px;
+}
+
+.placeholder-icon {
+  opacity: 0.4;
+}
+
+/* Content */
+.business-card-content {
+  padding: 15px 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.business-card-content h3 {
+  font-size: 1.25rem;
+  margin: 0 0 6px 0;
+  color: #d32323;
 }
 
 .business-location {
-  color: #666;
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
-  display: flex;
-  align-items: center;
-}
-
-.business-location::before {
-  content: "📍";
-  margin-right: 0.5rem;
+  font-size: 0.9rem;
+  color: #888;
+  margin: 0 0 12px 0;
 }
 
 .business-description {
-  color: #555;
-  line-height: 1.6;
+  flex-grow: 1;
   font-size: 0.95rem;
-  margin: 0;
+  color: #555;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* show max 3 lines */
+  line-clamp: 3; /* standard property for compatibility */
+  -webkit-box-orient: vertical;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .businesses-header {
-    padding: 2rem 0;
-  }
-
-  .businesses-header h1 {
-    font-size: 2rem;
-  }
-
-  .business-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .businesses-container {
-    padding: 0 1rem 2rem 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .business-card {
-    padding: 1rem;
-  }
-
-  .businesses-header h1 {
-    font-size: 1.75rem;
-  }
-}

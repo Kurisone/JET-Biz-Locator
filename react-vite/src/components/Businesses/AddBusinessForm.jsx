@@ -27,8 +27,12 @@ const AddBusinessForm = () => {
     hours_thursday: '',
     hours_friday: '',
     hours_saturday: '',
-    hours_sunday: ''
+    hours_sunday: '',
+    images: []
   });
+
+  const [imageUrl, setImageUrl] = useState('');
+
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -62,6 +66,23 @@ const AddBusinessForm = () => {
     return newErrors;
   };
 
+  const handleAddImage = () => {
+    if (imageUrl.trim()) {
+      setFormData(prev => ({
+        ...prev,
+        images: [...prev.images, imageUrl.trim()]
+      }));
+      setImageUrl('');
+    }
+  };
+
+  const handleRemoveImage = (index) => {
+    setFormData(prev => {
+      const newImages = [...prev.images];
+      newImages.splice(index, 1);
+      return { ...prev, images: newImages };
+    });
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -103,7 +124,38 @@ const AddBusinessForm = () => {
 
           <div className="form-section">
             <h3>Basic Information</h3>
-
+            <div className="form-section">
+              <h3>Business Images</h3>
+              <div className="image-upload">
+                <input
+                  type="text"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="Enter image URL"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddImage}
+                  className="add-image-btn"
+                >
+                  Add Image
+                </button>
+              </div>
+              <div className="image-previews">
+                {formData.images.map((url, index) => (
+                  <div key={index} className="image-preview">
+                    <img src={url} alt={`Preview ${index}`} />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveImage(index)}
+                      className="remove-image-btn"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
             <div className="form-group">
               <label htmlFor="name">Business Name *</label>
               <input

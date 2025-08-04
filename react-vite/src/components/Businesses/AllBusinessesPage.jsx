@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchAllBusinesses } from '../../redux/businesses';
-import { FaHome, FaBars } from 'react-icons/fa';
+import { FaHome, FaBars, FaImage } from 'react-icons/fa';
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ProfileButton from '../Navigation/ProfileButton';
@@ -15,7 +15,17 @@ const AllBusinessesPage = () => {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
-  const businessesArray = Object.values(businesses);
+  
+  // Convert businesses object to array for easier mapping
+  
+  const businessesArray = Object.values(businesses).map(business => {
+    // Get first image if available
+    const primaryImage = business.images?.[0]?.image_url || null;
+    return {
+      ...business,
+      primaryImage
+    };
+  });
 
   useEffect(() => {
     dispatch(fetchAllBusinesses());
@@ -26,7 +36,6 @@ const AllBusinessesPage = () => {
   };
 
   const toggleMenu = () => setShowMenu(!showMenu);
-
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -115,11 +124,27 @@ const AllBusinessesPage = () => {
               key={business.id}
               className="business-card"
               onClick={() => handleBusinessClick(business.id)}
-              style={{ cursor: 'pointer' }}
             >
-              <h3>{business.name}</h3>
-              <p className="business-location">{business.city}, {business.state}</p>
-              <p className="business-description">{business.description}</p>
+              {/* Image display section - NEW */}
+              <div className="business-card-image-container">
+                {business.primaryImage ? (
+                  <img 
+                    src={business.primaryImage} 
+                    alt={business.name} 
+                    className="business-card-image"
+                  />
+                ) : (
+                  <div className="image-placeholder">
+                    <FaImage className="placeholder-icon" />
+                  </div>
+                )}
+              </div>
+              
+              <div className="business-card-content">
+                <h3>{business.name}</h3>
+                <p className="business-location">{business.city}, {business.state}</p>
+                <p className="business-description">{business.description}</p>
+              </div>
             </div>
           ))}
         </div>
