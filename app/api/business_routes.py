@@ -45,7 +45,15 @@ def get_all_businesses():
         query = query.filter(Business.price_range == int(price)) # this is when there is Exact price match
 
 
-    businesses = query.options(joinedload(Business.business_images)).all()
+        # Pagination parameters
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+
+    pagination = query.options(joinedload(Business.business_images)).paginate(
+        page=page, per_page=per_page, error_out=False
+    )
+
+    businesses = pagination.items
     
     business_list = []
     for business in businesses:
@@ -59,7 +67,12 @@ def get_all_businesses():
     
     return {
         "businesses": business_list,
-        "total_results": len(business_list),
+        "pagination": {
+            "page": pagination.page,
+            "pages": pagination.pages,
+            "per_page": pagination.per_page,
+            "total": pagination.total
+        },
         "search_params": {
             "search": search or None,
             "category": category or None,
