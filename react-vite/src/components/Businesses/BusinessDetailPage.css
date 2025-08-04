@@ -1,131 +1,149 @@
+/* BusinessDetailPage.css */
 .business-detail-page {
-  min-height: 100vh;
-  background-color: #f5f5f5;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .business-detail-header {
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
-  padding: 1.5rem 0;
-}
-
-.breadcrumb {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
+  margin-bottom: 20px;
 }
 
 .back-button {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  background: none;
+  border: none;
+  color: #0073bb;
   cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
+  font-size: 16px;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
 }
 
 .back-button:hover {
-  background: rgba(255, 255, 255, 0.3);
+  text-decoration: underline;
 }
 
 .business-detail-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .business-detail-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin-bottom: 20px;
 }
 
 .business-title-section {
-  padding: 2rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #e6e6e6;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.business-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
 }
 
 .business-title {
-  font-size: 2.5rem;
+  font-size: 32px;
   font-weight: 700;
   color: #333;
-  margin: 0 0 1rem 0;
+  margin: 0;
+}
+
+.business-owner-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.edit-business-btn,
+.delete-business-btn {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.edit-business-btn:hover {
+  background-color: #e9f3fc;
+  border-color: #0073bb;
+}
+
+.delete-business-btn:hover {
+  background-color: #fce9e9;
+  border-color: #d32323;
 }
 
 .business-meta {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 15px;
+  margin: 10px 0;
 }
 
 .price-range {
-  color: #28a745;
-  font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 18px;
+  color: #666;
 }
 
-.rating-placeholder {
-  color: #ffa500;
-  font-size: 1rem;
+.rating {
+  font-size: 18px;
+  font-weight: 700;
+  color: #d32323;
 }
 
 .business-location-main {
   color: #666;
-  font-size: 1.1rem;
+  font-size: 16px;
 }
 
 .business-content {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 2rem;
-  padding: 2rem;
+  margin-top: 20px;
 }
 
-.business-description-section h3 {
-  color: #333;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
+.business-description-section {
+  margin-bottom: 30px;
 }
 
 .business-description-text {
-  color: #555;
+  font-size: 16px;
   line-height: 1.6;
-  font-size: 1rem;
+  color: #333;
 }
 
-.business-info-section h3 {
-  color: #333;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
+.business-info-section {
+  margin-bottom: 30px;
 }
 
 .info-item {
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.info-item:last-child {
-  border-bottom: none;
+  display: flex;
+  margin-bottom: 15px;
 }
 
 .info-label {
   font-weight: 600;
-  color: #333;
-  display: block;
-  margin-bottom: 0.25rem;
+  min-width: 100px;
+  color: #666;
 }
 
 .info-value {
-  color: #666;
-  line-height: 1.5;
+  flex: 1;
+  color: #333;
 }
 
 .info-value a {
-  color: #ff6b35;
+  color: #0073bb;
   text-decoration: none;
 }
 
@@ -133,118 +151,55 @@
   text-decoration: underline;
 }
 
-.placeholder-sections {
-  grid-column: 1 / -1;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid #eee;
+.images-section {
+  margin-bottom: 40px;
 }
 
-.placeholder-section {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-  text-align: center;
+.reviews-section {
+  margin-top: 40px;
+  border-top: 1px solid #e6e6e6;
+  padding-top: 20px;
 }
 
-.placeholder-section h3 {
-  color: #333;
-  margin-bottom: 0.5rem;
-}
-
-.placeholder-section p {
-  color: #666;
-  margin: 0;
-}
-
-.loading, .error {
-  text-align: center;
-  padding: 4rem 2rem;
-  font-size: 1.1rem;
-}
-
-.error {
-  color: #dc3545;
-}
-
-.loading {
-  color: #666;
-}
-
-.business-header-flex {
+.reviews-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  margin-bottom: 20px;
 }
 
-.edit-business-btn {
-  background: linear-gradient(135deg, #ff6b35, #f7931e);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.edit-business-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .business-content {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 1.5rem;
-  }
-
-  .business-title {
-    font-size: 2rem;
-  }
-
-  .business-title-section {
-    padding: 1.5rem;
-  }
-
-  .business-detail-container {
-    padding: 1rem;
-  }
-}
-
-.business-owner-actions {
+.loading-container {
   display: flex;
-  gap: 1rem;
+  justify-content: center;
   align-items: center;
+  height: 300px;
 }
 
-.delete-business-btn {
-  background: #dc3545;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  font-size: 1rem;
+.loading-spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #0073bb;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
 }
 
-.delete-business-btn:hover {
-  background: #c82333;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-.delete-business-btn i {
-  font-size: 0.9rem;
+.error {
+  text-align: center;
+  padding: 40px 20px;
 }
+
+.error h2 {
+  color: #d32323;
+  margin-bottom: 20px;
+}
+
+.error p {
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+

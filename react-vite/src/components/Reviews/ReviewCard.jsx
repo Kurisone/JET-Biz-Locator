@@ -1,5 +1,5 @@
 // ReviewCard.jsx - display each review
-
+import ReviewImages from '../Images/ReviewImages';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteReview, getReviewsByBusinessId } from '../../redux/reviews';
 import './Reviews.css';
@@ -24,7 +24,7 @@ const ReviewCard = ({ review }) => {
             <p>{stars}</p> {/* star rating visual */}
             <p>{review.content}</p>
             <p>{new Date(review.createdAt).toLocaleDateString()}</p>
-
+            <ReviewImages images={review.images} reviewId={review.id} />
             {currentUser?.id === review.userId && (
                 <button onClick={handleDelete}>Delete</button>
             )}

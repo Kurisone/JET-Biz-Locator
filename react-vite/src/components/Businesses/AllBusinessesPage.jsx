@@ -52,14 +52,6 @@ const AllBusinessesPage = () => {
             <FaHome />
           </Link>
 
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Find a business near you"
-              className="search-input"
-            />
-          </div>
-
           <div className="hamburger-menu" ref={menuRef}>
             <button onClick={toggleMenu} className="hamburger-button">
               <FaBars />

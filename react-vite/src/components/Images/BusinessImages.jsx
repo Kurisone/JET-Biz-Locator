@@ -1,8 +1,14 @@
-import React from 'react';
+
+import './BusinessImages.css';
 
 const BusinessImages = ({ images }) => {
   if (!images || images.length === 0) {
-    return <p>No images available.</p>;
+    return (
+      <div className="business-images">
+        <h3>Photos</h3>
+        <p className="no-images">No images available yet.</p>
+      </div>
+    );
   }
 
   return (
