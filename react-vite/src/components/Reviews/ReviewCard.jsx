@@ -19,10 +19,9 @@ const ReviewCard = ({ review }) => {
             }
         }
     };
-    // Check if current user is the review owner
+
     const isReviewOwner = currentUser &&
-        (currentUser.id === review.user_id ||
-            currentUser.id === review.userId);
+        (currentUser.id === review.user_id || currentUser.id === review.userId);
 
     return (
         <div className="review-card">
@@ -46,6 +45,7 @@ const ReviewCard = ({ review }) => {
                 {review.content}
             </div>
 
+            {/* Render the new ReviewImages gallery */}
             {review.images?.length > 0 && (
                 <ReviewImages images={review.images} reviewId={review.id} />
             )}

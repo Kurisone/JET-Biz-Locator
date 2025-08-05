@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateBusiness, deleteBusiness } from '../../redux/businesses';
+import { deleteBusiness, addBusinessImage, deleteBusinessImage } from '../../redux/businesses';
 import { getReviewsByBusinessId } from '../../redux/reviews';
 import BusinessImages from '../Images/BusinessImages';
 import ReviewList from '../Reviews/ReviewList';
@@ -78,23 +78,37 @@ const BusinessDetailPage = () => {
     if (!business) return;
 
     try {
-      const updatedImages = [...(business.images || []), newImageUrl.trim()];
+      const newImage = await dispatch(addBusinessImage(business.id, newImageUrl.trim()));
 
-      const updatedBusiness = {
-        ...business,
-        images: updatedImages
-      };
+      setBusinessImages(prevImages => [...prevImages, newImage]);
 
-      const result = await dispatch(updateBusiness(business.id, updatedBusiness));
-      setBusiness(result);
-      setBusinessImages(result.images || []);
+      setBusiness(prevBusiness => ({
+        ...prevBusiness,
+        images: [...(prevBusiness.images || []), newImage]
+      }));
+
       setNewImageUrl('');
       setImageError('');
     } catch (err) {
-      setImageError('Failed to add image. Please try again.');
+      setImageError(err.message || 'Failed to add image. Please try again.');
       console.error(err);
     }
   };
+
+const handleDeleteImage = async (imageId) => {
+  try {
+    await dispatch(deleteBusinessImage(imageId, business.id)); // pass businessId
+
+    setBusinessImages(prev => prev.filter(img => img.id !== imageId));
+    setBusiness(prev => ({
+      ...prev,
+      images: (prev.images || []).filter(img => img.id !== imageId)
+    }));
+  } catch (err) {
+    console.error('Error deleting business image:', err);
+  }
+};
+
 
   if (loading) {
     return (
@@ -118,7 +132,6 @@ const BusinessDetailPage = () => {
 
   const isOwner = user && business && user.id === business.owner_id;
 
-  // Calculate average rating
   const calculateAverageRating = () => {
     if (!reviews || Object.keys(reviews).length === 0) return 0;
 
@@ -145,7 +158,6 @@ const BusinessDetailPage = () => {
             <div className="business-header-flex">
               <h1 className="business-title">{business.name}</h1>
 
-              {/* Edit/Delete buttons for owner */}
               {isOwner && (
                 <div className="business-owner-actions">
                   <Link
@@ -224,9 +236,12 @@ const BusinessDetailPage = () => {
               )}
             </div>
 
-            {/* Business Images Section */}
             <div className="images-section">
-              <BusinessImages images={businessImages} />
+              <BusinessImages
+                images={businessImages}
+                isOwner={isOwner}
+                onDeleteImage={handleDeleteImage}
+              />
               {isOwner && (
                 <div className="add-image-form">
                   <input
@@ -243,7 +258,6 @@ const BusinessDetailPage = () => {
               )}
             </div>
 
-            {/* Reviews Section */}
             <div className="reviews-section">
               <div className="reviews-header">
                 <h3>Customer Reviews</h3>

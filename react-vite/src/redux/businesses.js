@@ -16,6 +16,8 @@ const LOAD_ALL_BUSINESSES = 'businesses/LOAD_ALL_BUSINESSES';
 const ADD_BUSINESS = 'businesses/ADD_BUSINESS';
 const UPDATE_BUSINESS = 'businesses/UPDATE_BUSINESS';
 const DELETE_BUSINESS = 'businesses/DELETE_BUSINESS';
+const DELETE_BUSINESS_IMAGE = 'businesses/DELETE_BUSINESS_IMAGE';
+
 
 // These are Action Creators for businesses
 const loadBusinesses = (businesses) => ({
@@ -33,6 +35,8 @@ const addBusiness = (business) => ({
   business
 });
 
+
+
 const updateBusinessAction = (business) => ({
   type: UPDATE_BUSINESS,
   business
@@ -46,21 +50,47 @@ const deleteBusinessAction = (businessId) => ({
 // Thunk Action
 export const fetchAllBusinesses = (params = {}) => async (dispatch) => {
   const cleanParams = {};
-Object.entries(params).forEach(([key, value]) => {
-  if (value !== undefined && value !== 'undefined' && value !== '') {
-    cleanParams[key] = value;
-  }
-});
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== 'undefined' && value !== '') {
+      cleanParams[key] = value;
+    }
+  });
   const queryParams = new URLSearchParams(params).toString();
   const response = await fetch(`/api/businesses?${queryParams}`);
 
   if (response.ok) {
     const data = await response.json();
-    dispatch(loadBusinesses(data.businesses)); 
+    dispatch(loadBusinesses(data.businesses));
     return data;
   } else {
     const errorData = await response.json();
     throw new Error(errorData.message || 'Failed to fetch businesses');
+  }
+};
+
+export const addBusinessImage = (businessId, imageUrl) => async () => {
+  try {
+    const response = await fetch(`/api/businesses/${businessId}/images`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCsrfToken(),
+      },
+      credentials: 'include',
+      body: JSON.stringify({ image_url: imageUrl }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to add image');
+    }
+
+    const newImage = await response.json();
+
+    return newImage;
+  } catch (error) {
+    console.error('Error adding business image:', error);
+    throw error;
   }
 };
 
@@ -115,6 +145,36 @@ export const updateBusiness = (businessId, businessData) => async (dispatch) => 
   }
 };
 
+export const deleteBusinessImage = (imageId, businessId) => async (dispatch) => {
+  try {
+    const response = await fetch(`/api/businesses/images/${imageId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCsrfToken(),
+      },
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to delete image');
+    }
+
+    // Dispatch only on successful deletion
+    dispatch({
+      type: DELETE_BUSINESS_IMAGE,
+      payload: { imageId, businessId },
+    });
+
+    return true;
+  } catch (error) {
+    console.error('Error deleting business image:', error);
+    throw error;
+  }
+};
+
+
 // thunk for delete business
 export const deleteBusiness = (businessId) => async (dispatch) => {
   try {
@@ -147,7 +207,7 @@ const initialState = {
     search: '',
     category: '',
     priceRange: ''
-  } 
+  }
 };
 
 // Reducer
@@ -170,15 +230,23 @@ export const businessesReducer = (state = initialState, action) => {
       };
       return newState;
     }
-    case UPDATE_BUSINESS: {
+    case DELETE_BUSINESS_IMAGE: {
+      const { imageId, businessId } = action.payload;
+
+      const updatedBusinesses = { ...state.allBusinesses };
+      const targetBusiness = updatedBusinesses[businessId];
+
+      if (!targetBusiness) return state;
+
+      const updatedImages = (targetBusiness.images || []).filter(img => img.id !== imageId);
+      updatedBusinesses[businessId] = { ...targetBusiness, images: updatedImages };
+
       return {
         ...state,
-        allBusinesses: {
-          ...state.allBusinesses,
-          [action.business.id]: action.business
-        }
+        allBusinesses: updatedBusinesses
       };
     }
+
     case SET_FILTERS: {
       return {
         ...state,

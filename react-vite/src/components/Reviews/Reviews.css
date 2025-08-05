@@ -17,6 +17,48 @@
   margin-bottom: 20px;
 }
 
+.review-images-wrapper {
+  margin-top: 1rem;
+}
+
+.review-images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.review-image-container {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.review-image-container:hover {
+  transform: scale(1.05);
+}
+
+.review-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px;
+}
+
+.review-image-caption {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  right: 6px;
+  background-color: rgba(0, 0, 0, 0.65);
+  color: white;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
 /* Labels */
 label {
   font-weight: 600;
