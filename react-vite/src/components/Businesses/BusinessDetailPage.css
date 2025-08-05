@@ -153,6 +153,7 @@
 
 .images-section {
   margin-bottom: 40px;
+  display: flex;
 }
 
 .reviews-section {
