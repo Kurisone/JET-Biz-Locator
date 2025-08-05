@@ -93,17 +93,18 @@ def get_single_business(id):
 @business_routes.route('/', methods=['POST'])
 @login_required
 def create_business():
-
     data = request.get_json()
+
+    # 1. Create the business object
     business = Business(
         owner_id=current_user.id,
-        name=data['name'], # Required field (will error if missing)
+        name=data['name'],
         description=data['description'],
         address=data['address'],
         city=data['city'],
         state=data['state'],
         zip_code=data['zip_code'],
-        country=data.get('country', 'USA'),  # Optional field; Default to USA if not provided
+        country=data.get('country', 'USA'),
         phone=data.get('phone'),
         website=data.get('website'),
         email=data.get('email'),
@@ -121,8 +122,33 @@ def create_business():
     )
 
     db.session.add(business)
-    db.session.commit()
-    return business.to_dict(), 201
+    db.session.commit() 
+
+    # 2. Handle multiple images (optional)
+    images = data.get('images', [])  
+
+    # Validate images is a list
+    if not isinstance(images, list):
+        return {"error": "Images must be a list of URLs"}, 400
+
+    # Add each image as a BusinessImage record
+    for idx, image_url in enumerate(images):
+        if image_url.strip():
+            new_image = BusinessImage(
+                business_id=business.id,
+                uploaded_by_user_id=current_user.id,
+                image_url=image_url.strip(),
+                caption='', 
+                is_primary=(idx == 0)  
+            )
+            db.session.add(new_image)
+
+    db.session.commit()  #
+
+    # 3. Reload business with images for response
+    business_with_images = Business.query.options(joinedload(Business.business_images)).get(business.id)
+
+    return business_with_images.to_dict(), 201
 
 # Update a business by ID
 # Get the business by ID
