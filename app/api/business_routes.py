@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from sqlalchemy.orm import joinedload
 from datetime import datetime
 from app.models import Business, BusinessImage, db, Review, Category  # Import models

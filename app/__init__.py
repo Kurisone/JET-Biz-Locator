@@ -37,7 +37,7 @@ app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(business_routes, url_prefix='/api/businesses')
 app.register_blueprint(review_routes, url_prefix='/api/reviews')
 app.register_blueprint(review_image_routes, url_prefix='/api/review-images')
-app.register_blueprint(business_image_routes, url_prefix='/api/business-images')  # Changed for consistency
+app.register_blueprint(business_image_routes, url_prefix='/api/businesses')
 
 # CORS Configuration
 frontend_url = os.environ.get('FRONTEND_URL', 'http://localhost:5173')
